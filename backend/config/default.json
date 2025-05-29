@@ -1,0 +1,4 @@
+{
+    "mongoURI":"mongodb+srv://chathuryadias:CHesy8udl0e53qSA@posefit.6umc3kl.mongodb.net/?retryWrites=true&w=majority&appName=poseFit",
+    "jwtSecret": "295Major"
+ }
