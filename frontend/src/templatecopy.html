@@ -8,7 +8,7 @@
     <meta name="theme-color" content="#4b5563" />
     <!-- Primary Meta Tags -->
     <title>
-        AI Workout Assistant with Pose Detection and Repetitions Counter
+        Pose Fit with Pose Detection and Repetitions Counter
     </title>
     <meta name="title" content="AI Workout Assistant with Pose Detection and Repetitions Counter" />
     <meta name="description"
@@ -52,11 +52,6 @@
                 factory();
         })((function () {
             'use strict';
-
-            /**
-             * The code was extracted from:
-             * https://github.com/davidchambers/Base64.js
-             */
 
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
@@ -166,11 +161,6 @@
                 }
             }
 
-            /*
-             * Expose the function on the window object
-             */
-
-            //use amd or just through the window object.
             if (window) {
                 if (typeof window.define == "function" && window.define.amd) {
                     window.define("jwt_decode", function () {
@@ -206,13 +196,7 @@
                     // Verify the token
                     try {
                         const decodedToken = jwt_decode(token);
-                        // The decodedToken variable now contains the decoded token payload
 
-                        // Perform any necessary checks or validations on the decoded token
-                        // For example, you can check the expiration date, user ID, or any other relevant information
-
-                        // If the token is valid and meets your criteria, allow access to the dashboard
-                        // Otherwise, redirect the user to the login page or display an error message
                         console.log('Token verification successful:', decodedToken);
                     } catch (error) {
                         // Error occurred while decoding or verifying the token
@@ -406,7 +390,7 @@
             <div id="bodyAboutBox"
                 class="w-full p-3 flex-1 overflow-y-auto h-full text-xs font-medium flex flex-col items-center text-justify text-gray-600"
                 style="display: none">
-                <h1 class="text-sm mb-1.5">AI Workout Assistant</h1>
+                <h1 class="text-sm mb-1.5">Pose Fit</h1>
                 <p class="mb-3">
                     An web application to help everyone do workout wherever and
                     whenever. Supported by the pose detector feature to analyze every
@@ -422,7 +406,7 @@
                 </p>
                 <h1 class="text-sm mb-1.5">Privacy Protection</h1>
                 <p class="mb-3">
-                    Pose Detector and Classification in the AI Workout Assistant
+                    Pose Detector and Classification in the PoseFit
                     application fully runs on the Client side, so no image data comes
                     out of the user's device. Videos or images processed by the program
                     will be automatically deleted.
@@ -430,8 +414,8 @@
                 <h1 class="text-sm mb-1.5">Learn More</h1>
                 <p class="mb-3 text-left w-full">
                     Open Source:
-                    <a href="https://github.com/reevald/ai-workout-assistant/" target="_blank" rel="noopener noreferrer"
-                        class="text-amber-600 underline">https://github.com/yashwanth6/295A_HPE/</a>
+                    <a href="https://github.com/Chathurya99/Pose_Fit_FYP" target="_blank" rel="noopener noreferrer"
+                        class="text-amber-600 underline">https://github.com/Chathurya99/Pose_Fit_FYP</a>
                 </p>
             </div>
             <div class="flex flex-row justify-center items-center border-t-2 py-2 w-full">

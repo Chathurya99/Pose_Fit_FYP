@@ -69,7 +69,7 @@
       # Header
       --------------------------------------------------------------*/
         #header {
-            background: white;
+            background: #0a0a0a;
             transition: all 0.5s;
             z-index: 997;
             padding: 20px 0;
@@ -362,11 +362,6 @@
         })((function () {
             'use strict';
 
-            /**
-             * The code was extracted from:
-             * https://github.com/davidchambers/Base64.js
-             */
-
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
             function InvalidCharacterError(message) {
@@ -475,11 +470,6 @@
                 }
             }
 
-            /*
-             * Expose the function on the window object
-             */
-
-            //use amd or just through the window object.
             if (window) {
                 if (typeof window.define == "function" && window.define.amd) {
                     window.define("jwt_decode", function () {
@@ -554,7 +544,7 @@
 </head>
 
 
-<body style="height: 100%;">
+<body style="height: 100%; background-color: #1a1a1a;">
     <header id="header" class="fixed-top d-flex align-items-center">
         <div class="container d-flex align-items-center">
 
