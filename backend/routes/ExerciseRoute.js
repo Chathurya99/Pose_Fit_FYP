@@ -97,4 +97,33 @@ router.post("/addactivity", async(req, res) => {
     }
 });
 
+router.post("/settingsChange", async (req, res) => {
+  const { userId, ...settings } = req.body;
+
+  if (!userId || Object.keys(settings).length === 0) {
+    return res.status(400).json({ message: "userId and settings are required" });
+  }
+
+  try {
+    const user = await User.findOne({ emailId: userId });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.settings = {
+      ...user.settings,
+      ...settings,
+    };
+
+    await user.save();
+    res.json({ message: "Settings updated successfully" });
+  } catch (error) {
+    console.error("Error updating settings:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+
+
 module.exports = router;

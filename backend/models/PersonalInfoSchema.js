@@ -22,17 +22,17 @@ const personalInfoSchema = new mongoose.Schema({
     required: true
   },
   BMI: {
-    type: Number,
-    required: true
+    type: Number
+    // required: true
   },
   BMR: {
-    type: Number,
-    required: true
+    type: Number
+    // required: true
   },
   BMITags: {
-    type: String,
-    required: true
+    type: String
+    // required: true
   }
 });
 
-//module.exports = mongoose.model('PersonalInfo', personalInfoSchema);
+module.exports = mongoose.model('PersonalInfo', personalInfoSchema);

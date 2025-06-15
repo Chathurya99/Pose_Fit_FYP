@@ -31,7 +31,8 @@ module.exports.createModel = createModel;
 
 
 const mongoose = require('mongoose');
-const personalInfoSchema = require('../models/PersonalInfoSchema');
+// const personalInfoSchema = require('../models/PersonalInfoSchema');
+//const personalInfoSchema = require('./PersonalInfoSchema');
 
 const workoutSchema = new mongoose.Schema({
   nameWorkout: {
@@ -49,6 +50,41 @@ const workoutSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now
+  }
+});
+
+const personalInfoSchema = new mongoose.Schema({
+  age: {
+    type: Number,
+    required: true
+  },
+  weight: {
+    type: Number,
+    required: true
+  },
+  height: {
+    type: Number,
+    required: true
+  },
+  gender: {
+    type: String,
+    required: true
+  },
+  activityLevel: {
+    type: String,
+    required: true
+  },
+  BMI: {
+    type: Number
+    
+  },
+  BMR: {
+    type: Number
+   
+  },
+  BMITags: {
+    type: String
+    
   }
 });
 
@@ -82,7 +118,22 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  personalInfo: [personalInfoSchema]
+  personalInfo: [personalInfoSchema],
+
+  settings: {
+    goal: String,
+    intensity: String,
+    duration: Number,
+    currWorkout: String,
+    currDuration: Number,
+    isAccessCamera: Boolean,
+    isAudioEffect: Boolean,
+    isFullscreen: Boolean,
+    isFlipCamera: Boolean,
+    isDirectionSign: Boolean,
+    isDeveloperMode: Boolean
+  },
+
 
 });
 

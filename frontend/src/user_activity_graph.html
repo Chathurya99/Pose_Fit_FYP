@@ -610,6 +610,29 @@
                 const workoutRepetitions = workouts.map(workout => workout.repetition);
 
                 // Create a bar chart using Chart.js
+                // new Chart('workouts-chart', {
+                //     type: 'bar',
+                //     data: {
+                //         labels: workoutNames,
+                //         datasets: [{
+                //             label: 'Repetitions',
+                //             data: workoutRepetitions,
+                //             backgroundColor: 'rgba(54, 162, 235, 1)',
+                //             borderColor: 'rgba(54, 162, 235, 1)',
+                //             borderWidth: 1
+                //         }]
+                //     },
+                //     options: {
+                //         scales: {
+                //             yAxes: 'Number or repetitions'[{
+                //                 ticks: {
+                //                     beginAtZero: true,
+                //                     color: '#333'
+                //                 }
+                //             }]
+                //         }
+                //     }
+                // });
                 new Chart('workouts-chart', {
                     type: 'bar',
                     data: {
@@ -617,21 +640,53 @@
                         datasets: [{
                             label: 'Repetitions',
                             data: workoutRepetitions,
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 1)',
+                            borderColor: 'rgba(135, 206, 250, 1)',
                             borderWidth: 1
                         }]
                     },
                     options: {
                         scales: {
-                            yAxes: 'Number or repetitions'[{
+                            x: {
                                 ticks: {
-                                    beginAtZero: true
+                                    color: '#cccccc',
+                                    font: {
+                                        size: 14
+                                    }
                                 }
-                            }]
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: '#cccccc',
+                                    font: {
+                                        size: 14
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Number of Repetitions',
+                                    color: '#777777',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#cccccc',
+                                    font: {
+                                        size: 14
+                                    }
+                                }
+                            }
                         }
                     }
                 });
+
             })
             .catch(error => console.error(error));
     </script>

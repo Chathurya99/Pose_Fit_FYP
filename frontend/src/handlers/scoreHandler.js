@@ -53,7 +53,7 @@ export default class ScoreHandler {
       date: new Date().toLocaleString(),
     });
 
-    let emailId= "abc@gmail.com";
+    let emailId= "nethu200304202@gmail.com";
     emailId = localStorage.getItem("uid");
     const data = { emailId, newScore };
 

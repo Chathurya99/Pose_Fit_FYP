@@ -1,6 +1,6 @@
 {
-  "nameWorkout": ["Push Up", "Squat","High Curls","Toy Robot","Jumping Jacks", "Lunges"],
-  "slugWorkout": ["push-up", "squat", "curls","toy_robot_side", "jumping-jacks", "lunges"],
+  "nameWorkout": ["Push Up", "Squat","Curls","TRS","Jumping Jacks", "Lunges","hammer_curl"],
+  "slugWorkout": ["push-up", "squat", "curls","toy_robot_side", "jumping-jacks", "lunges","hammer_curl"],
   "duration": ["1 Minutes", "3 Minutes", "5 Minutes", "7 Minutes"],
   "settingsConfig": {
     "currWorkout": "None",
