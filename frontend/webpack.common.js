@@ -68,6 +68,14 @@ module.exports = {
       template: './src/contactus.html',
       filename: 'contactus.html'
     }),
+    new HtmlWebpackPlugin({
+      template: './src/workoutplans.html',
+      filename: 'workoutplans.html'
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/team.html',
+      filename: 'team.html'
+    }),
   ],
   devServer: {
     watchFiles: ["./src/*.html"],

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Workout Plans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #0a0f2c;
+            color: #eaf4ff;
+            font-family: 'Poppins', sans-serif;
+            padding-top: 90px;
+            /* prevent overlap with fixed header */
+        }
+
+        h1 {
+            color: #70c1ff;
+        }
+
+        #header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #0a0a0a;
+            z-index: 999;
+            padding: 15px 0;
+            box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #header .logo {
+            font-size: 24px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        #header .logo a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .navbar {
+            padding: 0;
+            width: 100%;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            padding-left: 0;
+            margin: 0;
+            align-items: center;
+        }
+
+        .navbar li a {
+            color: #eaf4ff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .navbar li a:hover {
+            color: #70c1ff;
+        }
+
+        .logout-button {
+            background-color: red;
+            color: white;
+            padding: 6px 14px;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .workout-card {
+            background: linear-gradient(145deg, #16213e, #1a2a50);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .workout-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 153, 255, 0.5);
+        }
+
+        .workout-card h3 {
+            color: #70c1ff;
+        }
+
+        .workout-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-individual {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            width: 48%;
+        }
+
+        .btn-individual:hover {
+            background-color: #339cff;
+        }
+
+        .btn-team {
+            background-color: #6c63ff;
+            color: white;
+            border: none;
+            width: 48%;
+        }
+
+        .btn-team:hover {
+            background-color: #8a83ff;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <header id="header" class="fixed-top d-flex align-items-center bg-dark">
+        <div class="container d-flex align-items-center">
+            <h1 class="logo me-auto"><a href="index.html" class="text-light">POSE FIT</a></h1>
+            <nav id="navbar" class="navbar">
+                <ul class="d-flex list-unstyled mb-0">
+                    <li class="mr-3"><a href="dashboard.html" class="text-light">Exercises</a></li>
+                    <li class="mr-3"><a href="user_activity.html" class="text-light">Activities</a></li>
+                    <li class="mr-3"><a href="workoutplans.html" class="text-light">Workout Plans</a></li>
+                    <li class="mr-3"><a href="bmi.html" class="text-light">Diet Plan Generator</a></li>
+                    <li class="mr-3"><a href="user_activity_graph.html" class="text-light">Activity Graphs</a></li>
+                    <button id="logoutButton" class="btn btn-danger btn-sm">Logout</button>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <!-- <h1 class="text-center mb-5" style="color: white;">Follow Workout Plans and Enjoy Your Fitness Journey</h1> -->
+
+        <div class="row">
+
+            <!-- Plan Template -->
+            <div class="col-md-6 col-lg-4 mb-4 d-flex">
+                <div class="workout-card w-100">
+                    <div>
+                        <h3>Plan 1: Full Body Burn</h3>
+                        <ul>
+                            <li>Jumping Jacks – 3 min</li>
+                            <li>Push-Ups – 4 min</li>
+                            <li>Squats – 4 min</li>
+                            <li>Plank – 4 min</li>
+                        </ul>
+                    </div>
+                    <div class="workout-buttons">
+                        <button class="btn btn-individual">Individual</button>
+                        <button class="btn btn-team" onclick="startTeamMeeting()">Team</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4 d-flex">
+                <div class="workout-card w-100">
+                    <div>
+                        <h3>Plan 2: Cardio Blast</h3>
+                        <ul>
+                            <li>High Knees – 3 min</li>
+                            <li>Burpees – 4 min</li>
+                            <li>Mountain Climbers – 4 min</li>
+                            <li>Skaters – 4 min</li>
+                        </ul>
+                    </div>
+                    <div class="workout-buttons">
+                        <button class="btn btn-individual">Individual</button>
+                        <button class="btn btn-team" onclick="location.href='team.html'">Team </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4 d-flex">
+                <div class="workout-card w-100">
+                    <div>
+                        <h3>Plan 3: Core Crusher</h3>
+                        <ul>
+                            <li>Crunches – 3 min</li>
+                            <li>Russian Twists – 4 min</li>
+                            <li>Leg Raises – 4 min</li>
+                            <li>Bicycle Crunches – 4 min</li>
+                        </ul>
+                    </div>
+                    <div class="workout-buttons">
+                        <button class="btn btn-individual">Individual</button>
+                        <button class="btn btn-team" onclick="location.href='team.html'">Team </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4 d-flex">
+                <div class="workout-card w-100">
+                    <div>
+                        <h3>Plan 4: Lower Body Strength</h3>
+                        <ul>
+                            <li>Lunges – 3 min</li>
+                            <li>Glute Bridges – 4 min</li>
+                            <li>Wall Sit – 4 min</li>
+                            <li>Calf Raises – 4 min</li>
+                        </ul>
+                    </div>
+                    <div class="workout-buttons">
+                        <button class="btn btn-individual">Individual</button>
+                        <button class="btn btn-team" onclick="location.href='team.html'">Team </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4 d-flex">
+                <div class="workout-card w-100">
+                    <div>
+                        <h3>Plan 5: HIIT Express</h3>
+                        <ul>
+                            <li>Jump Rope – 3 min</li>
+                            <li>Sprint Intervals – 4 min</li>
+                            <li>Burpees – 4 min</li>
+                            <li>Squat Jumps – 4 min</li>
+                        </ul>
+                    </div>
+                    <div class="workout-buttons">
+                        <button class="btn btn-individual">Individual</button>
+                        <button class="btn btn-team" onclick="location.href='team.html'">Team </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4 d-flex">
+                <div class="workout-card w-100">
+                    <div>
+                        <h3>Plan 6: Yoga Flow</h3>
+                        <ul>
+                            <li>Sun Salutations – 3 min</li>
+                            <li>Downward Dog – 4 min</li>
+                            <li>Warrior Poses – 4 min</li>
+                            <li>Child’s Pose – 4 min</li>
+                        </ul>
+                    </div>
+                    <div class="workout-buttons">
+                        <button class="btn btn-individual">Individual</button>
+                        <button class="btn btn-team" onclick="location.href='team.html'">Team </button>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function startTeamMeeting() {
+            fetch('http://localhost:5000/create-room')
+                .then(res => res.json())
+                .then(data => {
+                    const meetingURL = `http://localhost:5000/${data.roomId}`;
+                    window.open(meetingURL, '_blank');
+                })
+                .catch(err => alert("Failed to create room"));
+        }
+    </script>
+</body>
+
+</html>

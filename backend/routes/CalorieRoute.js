@@ -1,5 +1,5 @@
 // Import the User model
-const Personal = require('./models/personalInfoSchema');
+const personalInfo = require('./models/personalInfoSchema');
 const User = require('../models/UserSchema');
 
 // Assume the logged in user's ID is stored in a variable called "userId"
