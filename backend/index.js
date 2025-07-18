@@ -28,6 +28,9 @@ conn.connectDB();
 const peerServer = ExpressPeerServer(server, { debug: true });
 app.use('/peerjs', peerServer);
 
+// Store active rooms and their workout plans
+const activeRooms = new Map();
+
 // Routes
 app.get('/', (req, res) => res.send('API Running'));
 
@@ -50,11 +53,20 @@ app.get('/:room', (req, res) => {
   res.render('class', { RoomId: req.params.room });
 });
 
+// New route for team workout with specific workout plan
+app.get('/team/:room/:workoutPlan', (req, res) => {
+  const { room, workoutPlan } = req.params;
+  res.render('team-workout', { 
+    RoomId: room, 
+    WorkoutPlan: workoutPlan 
+  });
+});
+
 app.use('/api', require('./routes/UserRoute'));
 app.use('/exercise', require('./routes/ExerciseRoute'));
 app.use('/email', require('./routes/EmailRoute'));
 
-// Socket.IO
+// Socket.IO with enhanced workout plan support
 io.on('connection', socket => {
   socket.on('newUser', (userId, roomId) => {
     socket.join(roomId);
@@ -63,6 +75,96 @@ io.on('connection', socket => {
     socket.on('disconnect', () => {
       socket.to(roomId).emit('userDisconnect', userId);
     });
+  });
+
+  // Handle workout plan synchronization
+  socket.on('joinWorkoutRoom', (userId, roomId, workoutPlan) => {
+    socket.join(roomId);
+    
+    // Store room info
+    if (!activeRooms.has(roomId)) {
+      activeRooms.set(roomId, {
+        workoutPlan,
+        participants: new Set(),
+        workoutState: {
+          isStarted: false,
+          currentExercise: 0,
+          timer: null,
+          count: 0
+        }
+      });
+    }
+    
+    const room = activeRooms.get(roomId);
+    room.participants.add(userId);
+    
+    // Notify others in the room
+    socket.to(roomId).emit('userJoinedWorkout', userId, workoutPlan);
+    
+    // Send current room state to the new user
+    socket.emit('roomState', room.workoutState, workoutPlan);
+    
+    socket.on('disconnect', () => {
+      if (room.participants.has(userId)) {
+        room.participants.delete(userId);
+        socket.to(roomId).emit('userDisconnect', userId);
+        
+        // Clean up room if empty
+        if (room.participants.size === 0) {
+          activeRooms.delete(roomId);
+        }
+      }
+    });
+  });
+
+  // Handle workout control events
+  socket.on('startWorkout', (roomId) => {
+    const room = activeRooms.get(roomId);
+    if (room) {
+      room.workoutState.isStarted = true;
+      room.workoutState.currentExercise = 0;
+      room.workoutState.count = 0;
+      io.to(roomId).emit('workoutStarted', room.workoutState);
+    }
+  });
+
+  socket.on('pauseWorkout', (roomId) => {
+    const room = activeRooms.get(roomId);
+    if (room) {
+      room.workoutState.isStarted = false;
+      io.to(roomId).emit('workoutPaused', room.workoutState);
+    }
+  });
+
+  // Only the server advances the exercise for all
+  socket.on('nextExercise', (roomId) => {
+    const room = activeRooms.get(roomId);
+    if (room) {
+      room.workoutState.currentExercise++;
+      io.to(roomId).emit('exerciseChanged', room.workoutState);
+    }
+  });
+  socket.on('prevExercise', (roomId) => {
+    const room = activeRooms.get(roomId);
+    if (room) {
+      if (room.workoutState.currentExercise > 0) {
+        room.workoutState.currentExercise--;
+        io.to(roomId).emit('exerciseChanged', room.workoutState);
+      }
+    }
+  });
+
+  socket.on('updateCount', (roomId, count) => {
+    const room = activeRooms.get(roomId);
+    if (room) {
+      room.workoutState.count = count;
+      socket.to(roomId).emit('countUpdated', count);
+    }
+  });
+
+  // Handle pose estimation results
+  socket.on('poseResult', (roomId, poseData) => {
+    socket.to(roomId).emit('poseResult', socket.id, poseData);
   });
 });
 
