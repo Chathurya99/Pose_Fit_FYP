@@ -790,6 +790,18 @@ document.addEventListener("DOMContentLoaded", async () => {
             const timeTaken = Math.floor((Date.now() - challengeStartTime) / 1000);
             localStorage.setItem('challengeCompleted', 'true');
             localStorage.setItem('challengeTime', timeTaken.toString());
+            // Save to backend
+            const userId = localStorage.getItem('uid');
+            fetch('http://localhost:5000/challenge/complete', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                userId,
+                challengeName: challenge.display,
+                target: challenge.target,
+                timeTaken
+              })
+            });
           }
           setTimeout(() => {
             window.location.href = 'http://localhost:8080/challenges.html';

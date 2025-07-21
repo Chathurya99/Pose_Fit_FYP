@@ -195,8 +195,6 @@
             const username = form.elements.username.value;
             const password = form.elements.password.value;
 
-            localStorage.setItem("uid", username);
-
             const response = await fetch('http://localhost:5000/api/login2', {
                 method: 'POST',
                 headers: {
@@ -207,7 +205,10 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.token) {
-
+                        // Store the user's MongoDB _id as uid
+                        if (data.userId) {
+                          localStorage.setItem('uid', data.userId);
+                        }
 
                         const settings = {
                             currWorkout: 'squat',
@@ -221,7 +222,6 @@
                         };
 
                         localStorage.setItem('DBWOSettings', JSON.stringify(settings));
-
 
                         // Token received, store it in localStorage or a secure cookie
                         localStorage.setItem('token', data.token);
@@ -239,6 +239,16 @@
                 });
 
         });
+
+        // Defensive: If uid is not a valid ObjectId, clear localStorage and force re-login
+        function isValidObjectId(id) {
+            return /^[a-fA-F0-9]{24}$/.test(id);
+        }
+        if (localStorage.getItem('uid') && !isValidObjectId(localStorage.getItem('uid'))) {
+            localStorage.clear();
+            alert('Session reset due to invalid user ID. Please log in again.');
+            window.location.reload();
+        }
     </script>
 
 </body>

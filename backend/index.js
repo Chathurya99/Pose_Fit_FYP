@@ -65,6 +65,7 @@ app.get('/team/:room/:workoutPlan', (req, res) => {
 app.use('/api', require('./routes/UserRoute'));
 app.use('/exercise', require('./routes/ExerciseRoute'));
 app.use('/email', require('./routes/EmailRoute'));
+app.use('/challenge', require('./routes/ChallengeRoute'));
 
 // Socket.IO with enhanced workout plan support
 io.on('connection', socket => {

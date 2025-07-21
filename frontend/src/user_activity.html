@@ -590,7 +590,7 @@
                     <li><a href="dashboard.html">Exercises</a></li>
                     <li><a href="challenges.html">Challenges</a></li>
                     <li><a href="user_activity.html"> Activities</a></li>
-                    <li><a href="workoutplans.html">Workout plans</a></li>
+                    <li><a href="workoutplans.html">Leaderboard</a></li>
                     <li><a href="bmi.html">Diet Plan Generator</a></li>
                     <li><a href="user_activity_graph.html"> Activity Graphs</a></li>
                     <button id="logoutButton" class="logout-button">Logout</button>
@@ -643,11 +643,17 @@
         })
             .then(response => response.json())
             .then(data => {
+                if (!Array.isArray(data)) {
+                    console.error('API did not return an array:', data);
+                    let tableBody = document.getElementById("exercise-table");
+                    tableBody.innerHTML = '<tr><td colspan="4">Failed to load activities.</td></tr>';
+                    return;
+                }
                 // Sort the data by date in descending order
                 data.sort((a, b) => new Date(b.date) - new Date(a.date));
                 // Add the workout data to the table
                 let tableBody = document.getElementById("exercise-table");
-
+                tableBody.innerHTML = '';
                 data.forEach(rowData => {
                     let row = document.createElement("tr");
 
@@ -656,29 +662,16 @@
                     row.appendChild(exerciseNameCell);
 
                     let dateCell = document.createElement("td");
-
-
-
                     const dateObj = new Date(rowData.date);
-
-                    // Get the date and time components from the date object
                     const year = dateObj.getFullYear();
-                    const month = dateObj.getMonth() + 1; // Month is zero-indexed, so we add 1
+                    const month = dateObj.getMonth() + 1;
                     const day = dateObj.getDate();
                     const hours = dateObj.getHours();
                     const minutes = dateObj.getMinutes();
                     const seconds = dateObj.getSeconds();
-
-                    // Format the date and time components as a string
                     const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
                     const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-                    // Combine the date and time components into a final string
                     const formattedDateTime = `${formattedDate} ${formattedTime}`;
-
-                    //console.log(formattedDateTime); // Output: "2023-03-27 05:19:46"
-
-
                     dateCell.innerText = formattedDateTime;
                     row.appendChild(dateCell);
 
@@ -699,7 +692,11 @@
                     tableBody.appendChild(row);
                 });
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error('Fetch error:', error);
+                let tableBody = document.getElementById("exercise-table");
+                tableBody.innerHTML = '<tr><td colspan="4">Failed to load activities (network error).</td></tr>';
+            });
 
         function openPopup(exerciseName, date, duration, description) {
             // Set the title and description in the popup

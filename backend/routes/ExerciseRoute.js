@@ -13,17 +13,20 @@ const User = require('../models/UserSchema');
 // Fetch all Exercises
 
 router.post("/getAllExercises", async(req, res) => {
-     console.log(req.body.userId);
-     
+     const { userId } = req.body;
+     if (!userId) {
+       return res.status(400).json({ message: 'userId is required' });
+     }
      try {
-          const user = await User.findOne({ emailId: req.body.userId });
+          // Find user by _id (ObjectId), not emailId
+          const user = await User.findById(userId);
           if (!user) {
             return res.status(404).json({ message: 'User not found' });
           }
-          const workouts = user.workouts;
+          const workouts = user.workouts || [];
           return res.status(200).json(workouts);
      } catch (error) {
-          return res.status(400).json({ message: error });
+          return res.status(400).json({ message: error.message });
      }
 });
 

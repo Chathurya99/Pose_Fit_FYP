@@ -137,7 +137,7 @@
                     <li><a href="dashboard.html">Exercises</a></li>
                     <li><a href="challenges.html">Challenges</a></li>
                     <li><a href="user_activity.html"> Activities</a></li>
-                    <li><a href="workoutplans.html">Workout plans</a></li>
+                    <li><a href="workoutplans.html">Leaderboard</a></li>
                     <li><a href="bmi.html">Diet Plan Generator</a></li>
                     <li><a href="user_activity_graph.html"> Activity Graphs</a></li>
                     <button id="logoutButton" class="logout-button">Logout</button>
@@ -145,121 +145,107 @@
             </nav>
         </div>
     </header>
-    <div class="container">
-        <div class="row">
-            <!-- Plan 1 -->
-            <div class="col-md-6 col-lg-4 mb-4 d-flex">
-                <div class="workout-card w-100">
-                    <div>
-                        <h3>Plan 1: Lower Body & Upper Mix</h3>
-                        <ul>
-                            <li>Lunges – 3 min</li>
-                            <li>Push Ups – 4 min</li>
-                            <li>Hammer Curl – 4 min</li>
-                        </ul>
-                    </div>
-                    <div class="workout-buttons">
-                        <button class="btn btn-individual">Individual</button>
-                        <button class="btn btn-team" onclick="startTeamMeeting('plan1')">Team</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Plan 2 -->
-            <div class="col-md-6 col-lg-4 mb-4 d-flex">
-                <div class="workout-card w-100">
-                    <div>
-                        <h3>Plan 2: Cardio & Arms</h3>
-                        <ul>
-                            <li>Jumping Jacks – 3 min</li>
-                            <li>Dumbbell High Curl – 4 min</li>
-                            <li>Push Ups – 4 min</li>
-                        </ul>
-                    </div>
-                    <div class="workout-buttons">
-                        <button class="btn btn-individual">Individual</button>
-                        <button class="btn btn-team" onclick="startTeamMeeting('plan2')">Team</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Plan 3 -->
-            <div class="col-md-6 col-lg-4 mb-4 d-flex">
-                <div class="workout-card w-100">
-                    <div>
-                        <h3>Plan 3: Full Body Strength</h3>
-                        <ul>
-                            <li>Squats – 3 min</li>
-                            <li>Hammer Curl – 4 min</li>
-                            <li>Push Ups – 4 min</li>
-                        </ul>
-                    </div>
-                    <div class="workout-buttons">
-                        <button class="btn btn-individual">Individual</button>
-                        <button class="btn btn-team" onclick="startTeamMeeting('plan3')">Team</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Plan 4 -->
-            <div class="col-md-6 col-lg-4 mb-4 d-flex">
-                <div class="workout-card w-100">
-                    <div>
-                        <h3>Plan 4: Endurance & Coordination</h3>
-                        <ul>
-                            <li>Toy Robot Side – 3 min</li>
-                            <li>Lunges – 4 min</li>
-                            <li>Jumping Jacks – 4 min</li>
-                        </ul>
-                    </div>
-                    <div class="workout-buttons">
-                        <button class="btn btn-individual">Individual</button>
-                        <button class="btn btn-team" onclick="startTeamMeeting('plan4')">Team</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Plan 5 -->
-            <div class="col-md-6 col-lg-4 mb-4 d-flex">
-                <div class="workout-card w-100">
-                    <div>
-                        <h3>Plan 5: Classic Combo</h3>
-                        <ul>
-                            <li>Squats – 3 min</li>
-                            <li>Lunges – 4 min</li>
-                            <li>Dumbbell High Curl – 4 min</li>
-                        </ul>
-                    </div>
-                    <div class="workout-buttons">
-                        <button class="btn btn-individual">Individual</button>
-                        <button class="btn btn-team" onclick="startTeamMeeting('plan5')">Team</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Plan 6 -->
-            <div class="col-md-6 col-lg-4 mb-4 d-flex">
-                <div class="workout-card w-100">
-                    <div>
-                        <h3>Plan 6: Power Mix</h3>
-                        <ul>
-                            <li>Hammer Curl – 3 min</li>
-                            <li>Push Ups – 4 min</li>
-                            <li>Toy Robot Side – 4 min</li>
-                        </ul>
-                    </div>
-                    <div class="workout-buttons">
-                        <button class="btn btn-individual">Individual</button>
-                        <button class="btn btn-team" onclick="startTeamMeeting('plan6')">Team</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="container mt-5">
+        <h2 style="text-align: center;">Completed Challenges</h2>
+        <table class="table" style="color: #ecf3fa;">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Challenge</th>
+                    <th>Date</th>
+                    <th>Target</th>
+                    <th>Time Taken (s)</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody id="challenge-table"></tbody>
+        </table>
+    </div>
+    <div class="popup-overlay"></div>
+    <div class="popup">
+        <h4 id="popup-title"></h4>
+        <p id="popup-description"></p>
+        <button class="btn btn-secondary" onclick="closePopup()">Close</button>
     </div>
     <script>
-        function startTeamMeeting(plan) {
-            fetch('http://localhost:5000/create-room')
-                .then(res => res.json())
-                .then(data => {
-                    const meetingURL = `http://localhost:5000/team/${data.roomId}/${plan}`;
-                    window.open(meetingURL, '_blank');
-                })
-                .catch(err => alert("Failed to create room"));
+        // Defensive: If uid is not a valid ObjectId, clear localStorage and force re-login
+        function isValidObjectId(id) {
+            return /^[a-fA-F0-9]{24}$/.test(id);
+        }
+        if (localStorage.getItem('uid') && !isValidObjectId(localStorage.getItem('uid'))) {
+            localStorage.clear();
+            alert('Session reset due to invalid user ID. Please log in again.');
+            window.location.href = 'login.html';
+        }
+        // LEADERBOARD FETCH
+        fetch('http://localhost:5000/challenge/leaderboard/all')
+            .then(response => response.json())
+            .then(data => {
+                if (!Array.isArray(data)) {
+                    console.error('API did not return an array:', data);
+                    let tableBody = document.getElementById("challenge-table");
+                    tableBody.innerHTML = '<tr><td colspan="6">Failed to load leaderboard.</td></tr>';
+                    return;
+                }
+                let tableBody = document.getElementById("challenge-table");
+                tableBody.innerHTML = '';
+                data.forEach(rowData => {
+                    let row = document.createElement("tr");
+                    let userCell = document.createElement("td");
+                    userCell.innerText = rowData.userId?.firstName || rowData.userId?.emailId || 'User';
+                    row.appendChild(userCell);
+
+                    let nameCell = document.createElement("td");
+                    nameCell.innerText = rowData.challengeName;
+                    row.appendChild(nameCell);
+
+                    let dateCell = document.createElement("td");
+                    const dateObj = new Date(rowData.date);
+                    dateCell.innerText = dateObj.toLocaleString();
+                    row.appendChild(dateCell);
+
+                    let targetCell = document.createElement("td");
+                    targetCell.innerText = rowData.target;
+                    row.appendChild(targetCell);
+
+                    let timeCell = document.createElement("td");
+                    timeCell.innerText = rowData.timeTaken;
+                    row.appendChild(timeCell);
+
+                    let detailsCell = document.createElement("td");
+                    let detailsButton = document.createElement("button");
+                    detailsButton.innerText = "Details";
+                    detailsButton.classList.add("btn", "btn-primary");
+                    detailsButton.onclick = function () {
+                        openPopup(
+                            rowData.challengeName,
+                            dateObj.toLocaleString(),
+                            rowData.target,
+                            rowData.timeTaken,
+                            userCell.innerText
+                        );
+                    };
+                    detailsCell.appendChild(detailsButton);
+                    row.appendChild(detailsCell);
+
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                let tableBody = document.getElementById("challenge-table");
+                tableBody.innerHTML = '<tr><td colspan="6">Failed to load leaderboard (network error).</td></tr>';
+            });
+
+        function openPopup(name, date, target, time, user) {
+            document.getElementById("popup-title").innerText = name + ' (' + (user || '') + ')';
+            document.getElementById("popup-description").innerText = `User: ${user}\nDate: ${date}\nTarget: ${target}\nTime Taken: ${time} seconds`;
+            document.getElementsByClassName("popup-overlay")[0].style.display = "block";
+            document.getElementsByClassName("popup")[0].style.display = "block";
+        }
+        function closePopup() {
+            document.getElementsByClassName("popup-overlay")[0].style.display = "none";
+            document.getElementsByClassName("popup")[0].style.display = "none";
         }
     </script>
 </body>

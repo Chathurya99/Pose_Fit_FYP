@@ -552,7 +552,7 @@
                     <li><a href="dashboard.html">Exercises</a></li>
                     <li><a href="challenges.html">Challenges</a></li>
                     <li><a href="user_activity.html"> Activities</a></li>
-                    <li><a href="workoutplans.html">Workout plans</a></li>
+                    <li><a href="workoutplans.html">Leaderboard</a></li>
                     <li><a href="bmi.html">Diet Plan Generator</a></li>
                     <li><a href="user_activity_graph.html"> Activity Graphs</a></li>
                     <button id="logoutButton" class="logout-button">Logout</button>
@@ -683,6 +683,31 @@
             } else {
                 timeBox.textContent = '';
             }
+            // Fetch leaderboard for this challenge
+            fetch(`http://localhost:5000/challenge/leaderboard/${encodeURIComponent(challenge.display)}`)
+                .then(res => res.json())
+                .then(data => {
+                    // Build leaderboard HTML
+                    let leaderboardHTML = '<h4 style="color:#2563eb;">Leaderboard</h4>';
+                    leaderboardHTML += '<table class="table table-sm" style="background:white;color:#2563eb;"><thead><tr><th>User</th><th>Time</th><th>Count</th></tr></thead><tbody>';
+                    data.forEach(entry => {
+                        const user = entry.userId?.firstName || entry.userId?.emailId || 'User';
+                        leaderboardHTML += `<tr>
+                    <td>${user}</td>
+                    <td>${formatTime(entry.timeTaken)}</td>
+                    <td>${entry.target}</td>
+                  </tr>`;
+                    });
+                    leaderboardHTML += '</tbody></table>';
+                    // Insert into popup
+                    let leaderboardDiv = document.getElementById('popup-leaderboard');
+                    if (!leaderboardDiv) {
+                        leaderboardDiv = document.createElement('div');
+                        leaderboardDiv.id = 'popup-leaderboard';
+                        timeBox.parentNode.appendChild(leaderboardDiv);
+                    }
+                    leaderboardDiv.innerHTML = leaderboardHTML;
+                });
             popup.style.display = 'flex';
             document.getElementById('closeChallengePopup').onclick = function () {
                 popup.style.display = 'none';
