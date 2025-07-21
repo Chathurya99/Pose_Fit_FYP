@@ -2,17 +2,15 @@
 <html>
 
 <head>
-    <title>Activity</title>
+    <title>Dashboard Page</title>
     <link rel="icon" type="image/x-icon" href="./img/ai.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <style>
-        /* 1st change */
         @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
         body {
             font-family: "Open Sans", sans-serif;
-            color: #f4e8e8;
+            color: #444444;
         }
 
         a {
@@ -32,7 +30,6 @@
         h5,
         h6 {
             font-family: "Raleway", sans-serif;
-            color: #f9f6f6;
         }
 
         /*--------------------------------------------------------------
@@ -104,22 +101,15 @@
             max-height: 40px;
         }
 
-        /* 1st change ends here */
+        /*--------------------------------------------------------------
+      # Navigation Menu
+      --------------------------------------------------------------*/
+        /**
+      * Desktop Navigation 
+      */
         .navbar {
             padding: 0;
             width: 100%
-        }
-
-        .logout-button {
-            background-color: red;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            position: absolute;
-            top: 50%;
-            right: 16px;
-            transform: translateY(-50%);
         }
 
         .navbar ul {
@@ -132,6 +122,18 @@
 
         .navbar li {
             position: relative;
+        }
+
+        .logout-button {
+            background-color: red;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            position: absolute;
+            top: 50%;
+            right: 16px;
+            transform: translateY(-50%);
         }
 
         .navbar a,
@@ -243,12 +245,11 @@
             }
         }
 
-        /* Second Change */
         /**
       * Mobile Navigation 
       */
         .mobile-nav-toggle {
-            color: #ecf3fa;
+            color: #556270;
             font-size: 28px;
             cursor: pointer;
             display: none;
@@ -352,32 +353,6 @@
         .navbar-mobile .dropdown>.dropdown-active {
             display: block;
         }
-
-        /* Second change ends here */
-        /* Popup overlay is default */
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px gray;
-        }
-
-        .popup-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1;
-        }
     </style>
     <script>
 
@@ -386,11 +361,6 @@
                 factory();
         })((function () {
             'use strict';
-
-            /**
-             * The code was extracted from:
-             * https://github.com/davidchambers/Base64.js
-             */
 
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
@@ -500,11 +470,6 @@
                 }
             }
 
-            /*
-             * Expose the function on the window object
-             */
-
-            //use amd or just through the window object.
             if (window) {
                 if (typeof window.define == "function" && window.define.amd) {
                     window.define("jwt_decode", function () {
@@ -540,13 +505,6 @@
                     // Verify the token
                     try {
                         const decodedToken = jwt_decode(token);
-                        // The decodedToken variable now contains the decoded token payload
-
-                        // Perform any necessary checks or validations on the decoded token
-                        // For example, you can check the expiration date, user ID, or any other relevant information
-
-                        // If the token is valid and meets your criteria, allow access to the dashboard
-                        // Otherwise, redirect the user to the login page or display an error message
                         console.log('Token verification successful:', decodedToken);
                     } catch (error) {
                         // Error occurred while decoding or verifying the token
@@ -567,13 +525,17 @@
                 // Handle error if necessary
             });
     </script>
+
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="./template.css"> -->
 </head>
+
 
 <body style="height: 100%; background-color: #1a1a1a;">
     <header id="header" class="fixed-top d-flex align-items-center">
@@ -601,124 +563,170 @@
         </div>
     </header>
 
-    <div class="row content" style="margin-top: 50px;">
-        <p></p>
-    </div>
+    <!--------------------------------------------------------------
+  # Main Exercise Section.
+  -------------------------------------------------------------->
 
-    <div class="container mt-5">
-        <h2 style="text-align: center;">Activities Performed</h2>
-        <table class="table" style="color: #ecf3fa;">
-            <thead>
-                <tr>
-                    <th>Exercise</th>
-                    <th>Date</th>
-                    <th>Duration (mins)</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody id="exercise-table">
-                <!-- Table rows will be added dynamically with JavaScript -->
-            </tbody>
-        </table>
+    <!-- CHALLENGES SECTION (inserted above exercise cards) -->
+    <div class="container" style="margin-top: 120px; margin-bottom: 40px;">
+        <div class="text-center mb-5">
+            <h2 style="color: #2563eb; font-weight: bold;">🏆 Interactive Fitness Challenges</h2>
+            <p style="color: #3b82f6;">Pick a challenge, start your camera, and see how fast you can complete it!</p>
+        </div>
+        <div class="row" id="challenge-list">
+            <!-- Challenge cards will be injected here -->
+        </div>
+        <!-- Challenge Complete Popup -->
+        <div id="challengeCompletePopup"
+            style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(37,99,235,0.7); z-index:9999; align-items:center; justify-content:center;">
+            <div
+                style="background:white; padding:2rem 3rem; border-radius:1rem; text-align:center; max-width:90vw; border: 3px solid #2563eb;">
+                <h2 style="color:#2563eb;">🎉 Challenge Completed!</h2>
+                <p id="popup-message" style="font-size:1.2rem; color:#2563eb;"></p>
+                <div class="popup-time" id="popup-time" style="font-size:1.1rem; color:#1e40af;"></div>
+                <button id="closeChallengePopup"
+                    style="margin-top:1rem; padding:0.5rem 1.5rem; background:#2563eb; color:white; border:none; border-radius:0.5rem; font-size:1.1rem;">OK</button>
+            </div>
+        </div>
     </div>
-
-    <div class="popup-overlay"></div>
-    <div class="popup">
-        <h4 id="popup-title"></h4>
-        <p id="popup-description"></p>
-        <button class="btn btn-secondary" onclick="closePopup()">Close</button>
-    </div>
-
     <script>
-        // Get the user ID from local storage
-        let userId = localStorage.getItem("uid");
-
-        // Fetch workout data from the backend API
-        fetch('http://localhost:5000/exercise/getAllExercises', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ userId })
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Sort the data by date in descending order
-                data.sort((a, b) => new Date(b.date) - new Date(a.date));
-                // Add the workout data to the table
-                let tableBody = document.getElementById("exercise-table");
-
-                data.forEach(rowData => {
-                    let row = document.createElement("tr");
-
-                    let exerciseNameCell = document.createElement("td");
-                    exerciseNameCell.innerText = rowData.nameWorkout;
-                    row.appendChild(exerciseNameCell);
-
-                    let dateCell = document.createElement("td");
-
-
-
-                    const dateObj = new Date(rowData.date);
-
-                    // Get the date and time components from the date object
-                    const year = dateObj.getFullYear();
-                    const month = dateObj.getMonth() + 1; // Month is zero-indexed, so we add 1
-                    const day = dateObj.getDate();
-                    const hours = dateObj.getHours();
-                    const minutes = dateObj.getMinutes();
-                    const seconds = dateObj.getSeconds();
-
-                    // Format the date and time components as a string
-                    const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-                    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-                    // Combine the date and time components into a final string
-                    const formattedDateTime = `${formattedDate} ${formattedTime}`;
-
-                    //console.log(formattedDateTime); // Output: "2023-03-27 05:19:46"
-
-
-                    dateCell.innerText = formattedDateTime;
-                    row.appendChild(dateCell);
-
-                    let durationCell = document.createElement("td");
-                    durationCell.innerText = rowData.duration;
-                    row.appendChild(durationCell);
-
-                    let detailsCell = document.createElement("td");
-                    let detailsButton = document.createElement("button");
-                    detailsButton.innerText = "Details";
-                    detailsButton.classList.add("btn", "btn-primary");
-                    detailsButton.onclick = function () {
-                        openPopup(rowData.nameWorkout, formattedDateTime, rowData.duration, rowData.repetition);
-                    };
-                    detailsCell.appendChild(detailsButton);
-                    row.appendChild(detailsCell);
-
-                    tableBody.appendChild(row);
-                });
-            })
-            .catch(error => console.error(error));
-
-        function openPopup(exerciseName, date, duration, description) {
-            // Set the title and description in the popup
-            document.getElementById("popup-title").innerText = exerciseName;
-            document.getElementById("popup-description").innerText = `Date: ${date}\nDuration: ${duration} \nRepitetions: ${description}`;
-
-            // Show the popup and overlay
-            document.getElementsByClassName("popup-overlay")[0].style.display = "block";
-            document.getElementsByClassName("popup")[0].style.display = "block";
+        // List of challenges (slug, display, target, id, description)
+        const CHALLENGES = [
+            { slug: 'push-up', display: 'Push-up', target: 50, id: 'push-up-50', desc: 'Complete 50 push-ups with proper form.' },
+            { slug: 'squat', display: 'Squat', target: 50, id: 'squat-50', desc: 'Complete 50 squats with proper form.' },
+            { slug: 'jumping-jacks', display: 'Jumping Jacks', target: 100, id: 'jumping-jacks-100', desc: 'Complete 100 jumping jacks.' },
+            { slug: 'curls', display: 'Dumbbell High Curl', target: 10, id: 'curls-10', desc: 'Complete 10 dumbbell high curls.' },
+            { slug: 'lunges', display: 'Lunges', target: 10, id: 'lunges-10', desc: 'Complete 10 lunges (5 each leg).' },
+            { slug: 'toy_robot_side', display: 'Toy Robot', target: 30, id: 'toy_robot_side-30', desc: 'Complete 30 toy robot side steps.' },
+            { slug: 'hammer_curl', display: 'Hammer Curl', target: 50, id: 'hammer_curl-50', desc: 'Complete 50 hammer curls.' },
+        ];
+        // Render challenge cards
+        function renderChallenges() {
+            const row = document.getElementById('challenge-list');
+            // Check for completed challenge and time
+            const currentChallenge = JSON.parse(localStorage.getItem('currentChallenge') || 'null');
+            const challengeCompleted = localStorage.getItem('challengeCompleted');
+            const challengeTime = localStorage.getItem('challengeTime');
+            row.innerHTML = CHALLENGES.map(chal => {
+                // Check if this challenge is completed
+                let completedMsg = '';
+                if (currentChallenge && currentChallenge.challengeId === chal.id && challengeCompleted && currentChallenge.currentCount >= chal.target) {
+                    completedMsg = `<div style="color:green;font-weight:bold;margin-bottom:4px;">You have completed this challenge in <span>${formatTime(challengeTime)}</span>!</div>`;
+                }
+                return `
+          <div class="col-md-6 col-lg-4 mb-4 d-flex">
+            <div class="card shadow w-100" style="border:2px solid #2563eb; border-radius:16px;">
+              <div class="card-body d-flex flex-column justify-content-between">
+                <h4 class="card-title" style="color:#2563eb; font-weight:bold;">${chal.display} Challenge</h4>
+                ${completedMsg}
+                <p class="card-text" style="color:#1e40af;">${chal.desc}</p>
+                <div class="mb-2">
+                  <span style="color:#3b82f6; font-weight:600;">Target: ${chal.target} reps</span>
+                </div>
+                <div class="progress mb-2" style="height:10px;">
+                  <div class="progress-bar" id="${chal.id}-progress" role="progressbar" style="width:0%; background:#2563eb;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="${chal.target}"></div>
+                </div>
+                <small style="color:#2563eb;">Progress: <span id="${chal.id}-current">0</span>/${chal.target}</small>
+                <button class="btn btn-primary mt-3" style="background:#2563eb; border:none;" onclick="updateWorkout('${chal.slug}')">Start Challenge</button>
+                <button class="btn btn-outline-secondary mt-2" onclick="resetChallenge('${chal.id}')">Reset</button>
+              </div>
+            </div>
+          </div>
+        `;
+            }).join('');
         }
-
-        function closePopup() {
-            // Hide the popup and overlay
-            document.getElementsByClassName("popup-overlay")[0].style.display = "none";
-            document.getElementsByClassName("popup")[0].style.display = "none";
+        renderChallenges();
+        // Remove startChallengeFromList, use updateWorkout for challenge start
+        function resetChallenge(challengeId) {
+            const progressElement = document.getElementById(challengeId + '-progress');
+            const currentElement = document.getElementById(challengeId + '-current');
+            if (progressElement && currentElement) {
+                progressElement.style.width = '0%';
+                currentElement.textContent = '0';
+            }
+            let currentChallenge = JSON.parse(localStorage.getItem('currentChallenge') || 'null');
+            if (currentChallenge && currentChallenge.challengeId === challengeId) {
+                localStorage.removeItem('currentChallenge');
+                localStorage.removeItem('challengeCompleted');
+                localStorage.removeItem('challengeTime');
+            }
         }
-
+        function loadChallengeProgress() {
+            const currentChallenge = JSON.parse(localStorage.getItem('currentChallenge') || 'null');
+            const challengeCompleted = localStorage.getItem('challengeCompleted');
+            const challengeTime = localStorage.getItem('challengeTime');
+            CHALLENGES.forEach(chal => {
+                const progressElement = document.getElementById(chal.id + '-progress');
+                const currentElement = document.getElementById(chal.id + '-current');
+                let count = 0;
+                if (currentChallenge && currentChallenge.challengeId === chal.id) {
+                    count = currentChallenge.currentCount || 0;
+                }
+                if (progressElement && currentElement) {
+                    const progress = (count / chal.target) * 100;
+                    progressElement.style.width = progress + '%';
+                    currentElement.textContent = count;
+                }
+            });
+            if (currentChallenge && currentChallenge.currentCount >= currentChallenge.target && challengeCompleted) {
+                showChallengeCompletePopup(currentChallenge, challengeTime);
+                localStorage.removeItem('challengeCompleted');
+            }
+        }
+        function showChallengeCompletePopup(challenge, time) {
+            const popup = document.getElementById('challengeCompletePopup');
+            const msg = document.getElementById('popup-message');
+            const timeBox = document.getElementById('popup-time');
+            msg.textContent = `You are completed!`;
+            if (time) {
+                timeBox.textContent = `Time taken: ${formatTime(time)}`;
+            } else {
+                timeBox.textContent = '';
+            }
+            popup.style.display = 'flex';
+            document.getElementById('closeChallengePopup').onclick = function () {
+                popup.style.display = 'none';
+            };
+        }
+        function formatTime(seconds) {
+            seconds = parseInt(seconds, 10);
+            const min = Math.floor(seconds / 60);
+            const sec = seconds % 60;
+            return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            loadChallengeProgress();
+        });
+        window.addEventListener('storage', function (e) {
+            if (e.key === 'challengeCompleted' || e.key === 'challengeTime') {
+                loadChallengeProgress();
+            }
+        });
     </script>
 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function updateWorkout(exercise) {
+            // Find the challenge object
+            const chal = CHALLENGES.find(c => c.slug === exercise);
+            if (chal) {
+                // Store challenge info in localStorage
+                localStorage.setItem('currentChallenge', JSON.stringify({
+                    challengeId: chal.id,
+                    slug: chal.slug,
+                    target: chal.target,
+                    display: chal.display,
+                    currentCount: 0 // will be updated in challenge-run.js
+                }));
+            }
+            localStorage.setItem('DBWOSettings', JSON.stringify({
+                ...JSON.parse(localStorage.getItem('DBWOSettings')),
+                currWorkout: exercise
+            }));
+            location.href = 'http://localhost:8080/challenge-run.html';
+        }
+    </script>
     <script>
         // Logout button click event
         document.getElementById('logoutButton').addEventListener('click', (e) => {
@@ -730,6 +738,9 @@
             window.location.href = '/';
         });
     </script>
+
+
+
 
 </body>
 
