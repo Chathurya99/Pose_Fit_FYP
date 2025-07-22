@@ -125,7 +125,7 @@ export default class PoseHandler {
     if (this.scaler) {
       this.ctxPose.scale(this.scaler.w, this.scaler.h);
     }
-    this.ctxPose.fillStyle = "#eab308";
+    this.ctxPose.fillStyle = "#3b82f6"; // blue for angle arcs
     this.counter.initStage();
     this.counter.detectAnglesAndStages(keypoints, this.currClass);
     this.ctxPose.stroke();
@@ -133,7 +133,7 @@ export default class PoseHandler {
 
     // Draw skeleton
     this.ctxPose.beginPath();
-    this.ctxPose.fillStyle = "rgba(45,253,255,255)";
+    this.ctxPose.fillStyle = "#60a5fa"; // blue for body points
     this.ctxPose.strokeStyle = "black";
 
     const xyPoints = [];

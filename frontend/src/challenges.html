@@ -600,18 +600,24 @@
             { slug: 'toy_robot_side', display: 'Toy Robot', target: 30, id: 'toy_robot_side-30', desc: 'Complete 30 toy robot side steps.' },
             { slug: 'hammer_curl', display: 'Hammer Curl', target: 50, id: 'hammer_curl-50', desc: 'Complete 50 hammer curls.' },
         ];
+        // Helper to get all challenge progress from localStorage
+        function getAllChallengeProgress() {
+            return JSON.parse(localStorage.getItem('challengeProgress') || '{}');
+        }
+        // Helper to set all challenge progress in localStorage
+        function setAllChallengeProgress(progressObj) {
+            localStorage.setItem('challengeProgress', JSON.stringify(progressObj));
+        }
         // Render challenge cards
         function renderChallenges() {
             const row = document.getElementById('challenge-list');
-            // Check for completed challenge and time
-            const currentChallenge = JSON.parse(localStorage.getItem('currentChallenge') || 'null');
-            const challengeCompleted = localStorage.getItem('challengeCompleted');
-            const challengeTime = localStorage.getItem('challengeTime');
+            const allProgress = getAllChallengeProgress();
             row.innerHTML = CHALLENGES.map(chal => {
                 // Check if this challenge is completed
                 let completedMsg = '';
-                if (currentChallenge && currentChallenge.challengeId === chal.id && challengeCompleted && currentChallenge.currentCount >= chal.target) {
-                    completedMsg = `<div style="color:green;font-weight:bold;margin-bottom:4px;">You have completed this challenge in <span>${formatTime(challengeTime)}</span>!</div>`;
+                const chalProgress = allProgress[chal.id];
+                if (chalProgress && chalProgress.completed && chalProgress.currentCount >= chal.target) {
+                    completedMsg = `<div style="color:green;font-weight:bold;margin-bottom:4px;">You have completed this challenge in <span>${formatTime(chalProgress.time)}</span>!</div>`;
                 }
                 return `
           <div class="col-md-6 col-lg-4 mb-4 d-flex">
@@ -650,17 +656,21 @@
                 localStorage.removeItem('challengeCompleted');
                 localStorage.removeItem('challengeTime');
             }
+            // Remove progress for this challenge
+            const allProgress = getAllChallengeProgress();
+            delete allProgress[challengeId];
+            setAllChallengeProgress(allProgress);
+            renderChallenges();
+            loadChallengeProgress();
         }
         function loadChallengeProgress() {
-            const currentChallenge = JSON.parse(localStorage.getItem('currentChallenge') || 'null');
-            const challengeCompleted = localStorage.getItem('challengeCompleted');
-            const challengeTime = localStorage.getItem('challengeTime');
+            const allProgress = getAllChallengeProgress();
             CHALLENGES.forEach(chal => {
                 const progressElement = document.getElementById(chal.id + '-progress');
                 const currentElement = document.getElementById(chal.id + '-current');
                 let count = 0;
-                if (currentChallenge && currentChallenge.challengeId === chal.id) {
-                    count = currentChallenge.currentCount || 0;
+                if (allProgress[chal.id]) {
+                    count = allProgress[chal.id].currentCount || 0;
                 }
                 if (progressElement && currentElement) {
                     const progress = (count / chal.target) * 100;
@@ -668,9 +678,14 @@
                     currentElement.textContent = count;
                 }
             });
-            if (currentChallenge && currentChallenge.currentCount >= currentChallenge.target && challengeCompleted) {
-                showChallengeCompletePopup(currentChallenge, challengeTime);
-                localStorage.removeItem('challengeCompleted');
+            // Show popup if just completed a challenge
+            const justCompleted = localStorage.getItem('justCompletedChallenge');
+            if (justCompleted) {
+                const chal = CHALLENGES.find(c => c.id === justCompleted);
+                if (chal && allProgress[chal.id] && allProgress[chal.id].completed) {
+                    showChallengeCompletePopup(chal, allProgress[chal.id].time);
+                }
+                localStorage.removeItem('justCompletedChallenge');
             }
         }
         function showChallengeCompletePopup(challenge, time) {
@@ -723,7 +738,7 @@
             loadChallengeProgress();
         });
         window.addEventListener('storage', function (e) {
-            if (e.key === 'challengeCompleted' || e.key === 'challengeTime') {
+            if (e.key === 'challengeCompleted' || e.key === 'challengeTime' || e.key === 'challengeProgress') {
                 loadChallengeProgress();
             }
         });

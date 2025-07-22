@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>My Workouts</title>
+    <title>Visualize My Workout Progress</title>
     <link rel="icon" type="image/x-icon" href="./img/ai.svg" />
 
     <meta charset="UTF-8">
@@ -364,6 +364,75 @@
         /* border: 3px solid green; */
 
     }
+
+    .graph-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem auto;
+        background: #232a3b;
+        border-radius: 1.5rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+        padding: 2rem 1rem;
+        min-height: 440px;
+        transition: width 0.3s;
+        max-width: 98vw;
+        width: fit-content;
+    }
+
+    .date-filter-group {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2rem;
+        gap: 1rem;
+    }
+
+    .date-filter-group label {
+        color: #1565c0;
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 0;
+        letter-spacing: 0.5px;
+    }
+
+    #dateFilter {
+        background: #fff;
+        color: #1565c0;
+        border: 2px solid #1976d2;
+        border-radius: 0.75rem;
+        font-size: 1.13rem;
+        font-weight: 600;
+        box-shadow: 0 2px 8px #1976d233;
+        width: 220px;
+        transition: border 0.2s, box-shadow 0.2s;
+        padding: 0.4rem 0.9rem;
+        outline: none;
+    }
+
+    #dateFilter:focus {
+        border: 2.5px solid #1565c0;
+        box-shadow: 0 0 0 2px #90caf9;
+    }
+
+    .no-graph-message {
+        color: #70c1ff;
+        text-align: center;
+        font-size: 1.2rem;
+        margin-top: 2rem;
+    }
+
+    @media (max-width: 800px) {
+        .graph-container {
+            max-width: 98vw;
+            padding: 1rem 0.2rem;
+        }
+
+        #dateFilter {
+            width: 100%;
+        }
+    }
 </style>
 <script>
 
@@ -584,19 +653,29 @@
 
     <!-- My editing for   -->
     <div class="row" style="margin-top: 70px;">
-        <div class="col-10 offset-1 col-md-8 offset-md-2">
+        <div class="col-12 d-flex flex-column align-items-center">
             <div class="container mt-5" style="margin-bottom: 2px;">
                 <div class="center">
-                    <h2>My Workouts</h2>
+                    <h2>Visualize My Workout Progress</h2>
                 </div>
             </div>
+            <!-- Date Filter -->
+            <div class="date-filter-group">
+                <label for="dateFilter">Filter by Date:</label>
+                <input type="date" id="dateFilter" />
+            </div>
+            <div class="graph-container" id="graphContainer" style="display:none;">
+                <canvas id="workouts-chart" height="400"></canvas>
+            </div>
+            <div class="no-graph-message" id="noGraphMessage">Please select a date to view your activity graph.</div>
         </div>
     </div>
 
-    <canvas id="workouts-chart"></canvas>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        userId = localStorage.getItem("uid")
+        userId = localStorage.getItem("uid");
+        let allWorkouts = [];
+        let chartInstance = null;
         // Fetch workout data from the backend API
         fetch('http://localhost:5000/exercise/getAllExercises', {
             method: 'POST',
@@ -607,35 +686,59 @@
         })
             .then(response => response.json())
             .then(workouts => {
-                // Extract workout names and repetitions from the data
-                const workoutNames = workouts.map(workout => workout.nameWorkout);
-                const workoutRepetitions = workouts.map(workout => workout.repetition);
-
-                // Create a bar chart using Chart.js
-                // new Chart('workouts-chart', {
-                //     type: 'bar',
-                //     data: {
-                //         labels: workoutNames,
-                //         datasets: [{
-                //             label: 'Repetitions',
-                //             data: workoutRepetitions,
-                //             backgroundColor: 'rgba(54, 162, 235, 1)',
-                //             borderColor: 'rgba(54, 162, 235, 1)',
-                //             borderWidth: 1
-                //         }]
-                //     },
-                //     options: {
-                //         scales: {
-                //             yAxes: 'Number or repetitions'[{
-                //                 ticks: {
-                //                     beginAtZero: true,
-                //                     color: '#333'
-                //                 }
-                //             }]
-                //         }
-                //     }
-                // });
-                new Chart('workouts-chart', {
+                allWorkouts = workouts;
+            });
+        // Date filter logic
+        document.addEventListener('DOMContentLoaded', function () {
+            const dateFilter = document.getElementById('dateFilter');
+            const graphContainer = document.getElementById('graphContainer');
+            const noGraphMessage = document.getElementById('noGraphMessage');
+            dateFilter.addEventListener('change', function () {
+                const selectedDate = this.value;
+                if (!selectedDate) {
+                    graphContainer.style.display = 'none';
+                    noGraphMessage.style.display = 'block';
+                    noGraphMessage.innerText = 'Please select a date to view your activity graph.';
+                    if (chartInstance) chartInstance.destroy();
+                    return;
+                }
+                // Filter workouts by selected date (YYYY-MM-DD)
+                const filtered = allWorkouts.filter(row => {
+                    const dateObj = new Date(row.date);
+                    const year = dateObj.getFullYear();
+                    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+                    const day = dateObj.getDate().toString().padStart(2, '0');
+                    const formattedDate = `${year}-${month}-${day}`;
+                    return formattedDate === selectedDate;
+                });
+                if (filtered.length === 0) {
+                    graphContainer.style.display = 'none';
+                    noGraphMessage.style.display = 'block';
+                    noGraphMessage.innerText = 'No activity found for the selected date.';
+                    if (chartInstance) chartInstance.destroy();
+                    return;
+                }
+                // Extract workout names and repetitions for the selected date
+                const workoutNames = filtered.map(workout => workout.nameWorkout);
+                const workoutRepetitions = filtered.map(workout => workout.repetition);
+                // Dynamically set canvas and container width based on number of exercises
+                const minBarWidth = 60; // px per bar
+                const minCanvasWidth = 700; // px
+                const maxBoxWidth = 1600; // px, for very large numbers
+                const canvasWidth = Math.max(minCanvasWidth, workoutNames.length * minBarWidth);
+                const canvasElem = document.getElementById('workouts-chart');
+                const graphContainer = document.getElementById('graphContainer');
+                canvasElem.width = canvasWidth;
+                // Set the graph container width to match the canvas plus margin, but not more than maxBoxWidth
+                const containerMargin = 40; // px
+                graphContainer.style.width = Math.min(canvasWidth + containerMargin, maxBoxWidth) + 'px';
+                // Show the graph
+                graphContainer.style.display = 'flex';
+                noGraphMessage.style.display = 'none';
+                // Destroy previous chart if exists
+                if (chartInstance) chartInstance.destroy();
+                chartInstance = new Chart('workouts-chart', {
+                    // Chart.js will use the canvas height attribute
                     type: 'bar',
                     data: {
                         labels: workoutNames,
@@ -644,35 +747,31 @@
                             data: workoutRepetitions,
                             backgroundColor: 'rgba(54, 162, 235, 1)',
                             borderColor: 'rgba(135, 206, 250, 1)',
-                            borderWidth: 1
+                            borderWidth: 1,
+                            barThickness: 40 // Fixed bar width in px
                         }]
                     },
                     options: {
+                        responsive: false,
+                        maintainAspectRatio: false,
                         scales: {
                             x: {
                                 ticks: {
                                     color: '#cccccc',
-                                    font: {
-                                        size: 14
-                                    }
+                                    font: { size: 14 }
                                 }
                             },
                             y: {
                                 beginAtZero: true,
                                 ticks: {
                                     color: '#cccccc',
-                                    font: {
-                                        size: 14
-                                    }
+                                    font: { size: 14 }
                                 },
                                 title: {
                                     display: true,
                                     text: 'Number of Repetitions',
                                     color: '#777777',
-                                    font: {
-                                        size: 14,
-                                        weight: 'bold'
-                                    }
+                                    font: { size: 14, weight: 'bold' }
                                 }
                             }
                         },
@@ -680,17 +779,14 @@
                             legend: {
                                 labels: {
                                     color: '#cccccc',
-                                    font: {
-                                        size: 14
-                                    }
+                                    font: { size: 14 }
                                 }
                             }
                         }
                     }
                 });
-
-            })
-            .catch(error => console.error(error));
+            });
+        });
     </script>
 
     <script>

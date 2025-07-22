@@ -125,6 +125,204 @@
         ul {
             padding-left: 20px;
         }
+
+        /* Beautiful leaderboard table styles */
+        .leaderboard-table {
+            background: rgba(34, 40, 49, 0.95);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+            margin-top: 1.5rem;
+        }
+
+        .leaderboard-table thead th {
+            background: #1e293b;
+            color: #70c1ff;
+            border: none;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .leaderboard-table tbody tr {
+            transition: background 0.2s;
+        }
+
+        .leaderboard-table tbody tr:hover {
+            background: #232a3b !important;
+        }
+
+        .leaderboard-table td,
+        .leaderboard-table th {
+            vertical-align: middle;
+        }
+
+        .leaderboard-table td {
+            color: #eaf4ff;
+        }
+
+        .leaderboard-table .badge {
+            font-size: 1rem;
+            border-radius: 8px;
+            padding: 2px 8px;
+            margin-right: 4px;
+        }
+
+        /* Enhanced leaderboard interface styles */
+        .leaderboard-card {
+            background: linear-gradient(135deg, #1a223a 60%, #233554 100%);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+            padding: 2.5rem 2rem 2rem 2rem;
+            margin: 2rem auto 2rem auto;
+            max-width: 900px;
+        }
+
+        .leaderboard-header {
+            text-align: center;
+            color: #70c1ff;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 8px #0a0f2c88;
+        }
+
+        .challenge-select-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .challenge-select-group label {
+            color: #b6d8ff;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0;
+        }
+
+        #challenge-select.form-control {
+            background: #1e293b;
+            color: #70c1ff;
+            border: 1.5px solid #70c1ff;
+            border-radius: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            box-shadow: 0 2px 8px #0a0f2c33;
+            width: 260px;
+            transition: border 0.2s;
+        }
+
+        #challenge-select.form-control:focus {
+            border: 2px solid #70c1ff;
+            outline: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .leaderboard-card {
+                padding: 1.2rem 0.5rem;
+            }
+
+            .leaderboard-header {
+                font-size: 1.3rem;
+            }
+
+            #challenge-select.form-control {
+                width: 100%;
+            }
+        }
+
+        /* Popup redesign for leaderboard details */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1001;
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 2.5rem 2rem 2rem 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+            min-width: 320px;
+            max-width: 95vw;
+            width: 400px;
+            text-align: center;
+            animation: popupIn 0.2s;
+        }
+
+        @keyframes popupIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .popup .popup-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #70c1ff;
+        }
+
+        .popup .popup-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #70c1ff;
+            margin-bottom: 1.2rem;
+        }
+
+        .popup-details-table {
+            width: 100%;
+            margin: 0 auto 1.5rem auto;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+        }
+
+        .popup-details-table td {
+            padding: 0.3rem 0.5rem;
+            color: #eaf4ff;
+            font-size: 1.08rem;
+            text-align: left;
+            border: none;
+        }
+
+        .popup-details-table td.label {
+            color: #70c1ff;
+            font-weight: 600;
+            width: 40%;
+        }
+
+        .popup .btn-secondary {
+            margin-top: 1rem;
+            background: #90caf9;
+            color: #1565c0;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            transition: background 0.2s;
+        }
+
+        .popup .btn-secondary:hover {
+            background: #1565c0;
+            color: #e3f2fd;
+        }
+
+        @media (max-width: 600px) {
+            .popup {
+                padding: 1.2rem 0.5rem;
+                min-width: 0;
+                width: 98vw;
+            }
+        }
     </style>
 </head>
 
@@ -146,20 +344,14 @@
         </div>
     </header>
     <div class="container mt-5">
-        <h2 style="text-align: center;">Completed Challenges</h2>
-        <table class="table" style="color: #ecf3fa;">
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Challenge</th>
-                    <th>Date</th>
-                    <th>Target</th>
-                    <th>Time Taken (s)</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody id="challenge-table"></tbody>
-        </table>
+        <div class="leaderboard-card">
+            <div class="leaderboard-header">Leaderboard for today!!!!!! </div>
+            <div class="challenge-select-group">
+                <label for="challenge-select">Select Challenge:</label>
+                <select id="challenge-select" class="form-control"></select>
+            </div>
+            <div id="leaderboard-container"></div>
+        </div>
     </div>
     <div class="popup-overlay"></div>
     <div class="popup">
@@ -183,62 +375,81 @@
             .then(data => {
                 if (!Array.isArray(data)) {
                     console.error('API did not return an array:', data);
-                    let tableBody = document.getElementById("challenge-table");
-                    tableBody.innerHTML = '<tr><td colspan="6">Failed to load leaderboard.</td></tr>';
+                    let leaderboardContainer = document.getElementById("leaderboard-container");
+                    leaderboardContainer.innerHTML = '<div>Failed to load leaderboard.</div>';
                     return;
                 }
-                let tableBody = document.getElementById("challenge-table");
-                tableBody.innerHTML = '';
+                // Group results by challengeName
+                const grouped = {};
                 data.forEach(rowData => {
-                    let row = document.createElement("tr");
-                    let userCell = document.createElement("td");
-                    userCell.innerText = rowData.userId?.firstName || rowData.userId?.emailId || 'User';
-                    row.appendChild(userCell);
-
-                    let nameCell = document.createElement("td");
-                    nameCell.innerText = rowData.challengeName;
-                    row.appendChild(nameCell);
-
-                    let dateCell = document.createElement("td");
-                    const dateObj = new Date(rowData.date);
-                    dateCell.innerText = dateObj.toLocaleString();
-                    row.appendChild(dateCell);
-
-                    let targetCell = document.createElement("td");
-                    targetCell.innerText = rowData.target;
-                    row.appendChild(targetCell);
-
-                    let timeCell = document.createElement("td");
-                    timeCell.innerText = rowData.timeTaken;
-                    row.appendChild(timeCell);
-
-                    let detailsCell = document.createElement("td");
-                    let detailsButton = document.createElement("button");
-                    detailsButton.innerText = "Details";
-                    detailsButton.classList.add("btn", "btn-primary");
-                    detailsButton.onclick = function () {
-                        openPopup(
-                            rowData.challengeName,
-                            dateObj.toLocaleString(),
-                            rowData.target,
-                            rowData.timeTaken,
-                            userCell.innerText
-                        );
-                    };
-                    detailsCell.appendChild(detailsButton);
-                    row.appendChild(detailsCell);
-
-                    tableBody.appendChild(row);
+                    if (!grouped[rowData.challengeName]) grouped[rowData.challengeName] = [];
+                    grouped[rowData.challengeName].push(rowData);
+                });
+                // Populate dropdown
+                const challengeSelect = document.getElementById('challenge-select');
+                challengeSelect.innerHTML = '';
+                Object.keys(grouped).forEach(challengeName => {
+                    const option = document.createElement('option');
+                    option.value = challengeName;
+                    option.textContent = challengeName;
+                    challengeSelect.appendChild(option);
+                });
+                // Render leaderboard for selected challenge
+                function renderLeaderboard(challengeName) {
+                    let leaderboardContainer = document.getElementById("leaderboard-container");
+                    leaderboardContainer.innerHTML = '';
+                    if (!grouped[challengeName]) {
+                        leaderboardContainer.innerHTML = '<div>No results for this challenge.</div>';
+                        return;
+                    }
+                    // Only keep the latest attempt for each user (by date)
+                    const userLatest = {};
+                    grouped[challengeName].forEach(rowData => {
+                        const userKey = rowData.userId?._id || rowData.userId?.emailId || rowData.userId?.firstName || 'User';
+                        const prev = userLatest[userKey];
+                        if (!prev || new Date(rowData.date) > new Date(prev.date)) {
+                            userLatest[userKey] = rowData;
+                        }
+                    });
+                    // Convert to array and sort by timeTaken ascending (fastest first)
+                    const sorted = Object.values(userLatest).sort((a, b) => a.timeTaken - b.timeTaken);
+                    let tableHtml = `<h4 style=\"color:#70c1ff; margin-top:2rem;display:none;\">${challengeName} Leaderboard</h4>`;
+                    tableHtml += `<table class=\"table leaderboard-table\" style=\"color: #ecf3fa;\">\n`
+                        + `<thead>\n<tr>\n<th>User</th>\n<th>Date</th>\n<th>Target</th>\n<th>Time Taken (s)</th>\n<th>Details</th>\n</tr>\n</thead>\n<tbody>`;
+                    sorted.forEach((rowData, idx) => {
+                        let user = rowData.userId?.firstName || rowData.userId?.emailId || 'User';
+                        let dateObj = new Date(rowData.date);
+                        let badge = '';
+                        if (idx === 0) badge = '<span class=\"badge\" style=\"background:gold;color:#333;margin-left:8px;\">🥇</span>';
+                        else if (idx === 1) badge = '<span class=\"badge\" style=\"background:silver;color:#333;margin-left:8px;\">🥈</span>';
+                        else if (idx === 2) badge = '<span class=\"badge\" style=\"background:#cd7f32;color:#fff;margin-left:8px;\">🥉</span>';
+                        tableHtml += `<tr>`;
+                        tableHtml += `<td>${badge} ${user}</td>`;
+                        tableHtml += `<td>${dateObj.toLocaleString()}</td>`;
+                        tableHtml += `<td>${rowData.target}</td>`;
+                        tableHtml += `<td>${rowData.timeTaken}</td>`;
+                        tableHtml += `<td><button class=\"btn btn-primary\" onclick='openPopup(\"${challengeName}\", \"${dateObj.toLocaleString()}\", \"${rowData.target}\", \"${rowData.timeTaken}\", \"${user}\")'>Details</button></td>`;
+                        tableHtml += `</tr>`;
+                    });
+                    tableHtml += `</tbody></table>`;
+                    leaderboardContainer.innerHTML = tableHtml;
+                }
+                // Initial render
+                if (challengeSelect.options.length > 0) {
+                    renderLeaderboard(challengeSelect.value);
+                }
+                challengeSelect.addEventListener('change', function () {
+                    renderLeaderboard(this.value);
                 });
             })
             .catch(error => {
                 console.error('Fetch error:', error);
-                let tableBody = document.getElementById("challenge-table");
-                tableBody.innerHTML = '<tr><td colspan="6">Failed to load leaderboard (network error).</td></tr>';
+                let leaderboardContainer = document.getElementById("leaderboard-container");
+                leaderboardContainer.innerHTML = '<div>Failed to load leaderboard (network error).</div>';
             });
 
         function openPopup(name, date, target, time, user) {
-            document.getElementById("popup-title").innerText = name + ' (' + (user || '') + ')';
+            document.getElementById("popup-title").innerText = name + (user ? ` (${user})` : '');
             document.getElementById("popup-description").innerText = `User: ${user}\nDate: ${date}\nTarget: ${target}\nTime Taken: ${time} seconds`;
             document.getElementsByClassName("popup-overlay")[0].style.display = "block";
             document.getElementsByClassName("popup")[0].style.display = "block";
