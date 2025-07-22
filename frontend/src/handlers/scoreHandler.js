@@ -45,19 +45,14 @@ export default class ScoreHandler {
       repetition: inputData.repetition,
       date: new Date().toLocaleString(),
     };
-    this.DBWOScore.push({
-      id: +new Date(),
-      nameWorkout: inputData.nameWorkout,
-      duration: inputData.duration,
-      repetition: inputData.repetition,
-      date: new Date().toLocaleString(),
-    });
+    this.DBWOScore.push(newScore);
 
-    let emailId= "nethu200304202@gmail.com";
-    emailId = localStorage.getItem("uid");
-    const data = { emailId, newScore };
+    // Get userId and settings from localStorage
+    const userId = localStorage.getItem("uid");
+    const settings = JSON.parse(localStorage.getItem("DBWOSettings"));
+    const data = { userId, settings, ...newScore };
 
-    fetch('http://localhost:5000/exercise/scores', {
+    fetch('http://localhost:5000/exercise/save', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -71,7 +66,6 @@ export default class ScoreHandler {
       .catch(error => {
         console.error('Error:', error);
       });
-
 
     this.saveToLocalStorage();
   };

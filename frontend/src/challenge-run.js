@@ -746,6 +746,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Challenge mode variables
   let challenge = JSON.parse(localStorage.getItem('currentChallenge') || 'null');
   let challengeStartTime = null;
+  let challengeActualStartTime = null; // NEW: for accurate timing
   if (challenge) {
     // Show challenge info in the UI
     if (titleWOElem) {
@@ -770,6 +771,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
+  // NEW: Listen for when the actual challenge starts (after delay)
+  // We hook into the timer's finishDelayCB to set the actual start time
+  // This assumes finishDelayCB is called when the countdown ends and the challenge begins
+  const origFinishDelayCB = typeof window.finishDelayCB === 'function' ? window.finishDelayCB : () => {};
+  window.finishDelayCB = function() {
+    origFinishDelayCB();
+  };
+
   // Patch the count property with a getter/setter if not already patched
   if (challenge && !WOPose.counter._challengePatched) {
     WOPose.counter._count = WOPose.counter.count || 0;
@@ -778,6 +787,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         return this._count;
       },
       set: function(val) {
+        // Start timer when first rep is counted
+        if (this._count === 0 && val > 0) {
+          challengeActualStartTime = Date.now();
+          console.log('[DEBUG] challengeActualStartTime set (on first rep):', new Date(challengeActualStartTime).toLocaleTimeString());
+        }
         this._count = val;
         if (countElem) countElem.innerText = val;
         challenge.currentCount = val;
@@ -786,23 +800,36 @@ document.addEventListener("DOMContentLoaded", async () => {
           titleWOElem.innerText = `${challenge.display} Challenge: ${val}/${challenge.target}`;
         }
         if (val >= challenge.target) {
-          if (challengeStartTime) {
-            const timeTaken = Math.floor((Date.now() - challengeStartTime) / 1000);
-            localStorage.setItem('challengeCompleted', 'true');
-            localStorage.setItem('challengeTime', timeTaken.toString());
-            // Save to backend
-            const userId = localStorage.getItem('uid');
-            fetch('http://localhost:5000/challenge/complete', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                userId,
-                challengeName: challenge.display,
-                target: challenge.target,
-                timeTaken
-              })
-            });
+          // Use the actual challenge start time (on first rep)
+          let timeTaken = 0;
+          if (challengeActualStartTime) {
+            timeTaken = Math.floor((Date.now() - challengeActualStartTime) / 1000);
+          } else if (challengeStartTime) {
+            timeTaken = Math.floor((Date.now() - challengeStartTime) / 1000);
           }
+          localStorage.setItem('challengeCompleted', 'true');
+          localStorage.setItem('challengeTime', timeTaken.toString());
+          // Save to backend
+          const userId = localStorage.getItem('uid');
+          fetch('http://localhost:5000/challenge/complete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId,
+              challengeName: challenge.display,
+              target: challenge.target,
+              timeTaken
+            })
+          });
+          // --- NEW: Save progress for this challenge ---
+          let allProgress = JSON.parse(localStorage.getItem('challengeProgress') || '{}');
+          allProgress[challenge.challengeId] = {
+            currentCount: val,
+            completed: true,
+            time: timeTaken
+          };
+          localStorage.setItem('challengeProgress', JSON.stringify(allProgress));
+          localStorage.setItem('justCompletedChallenge', challenge.challengeId);
           setTimeout(() => {
             window.location.href = 'http://localhost:8080/challenges.html';
           }, 1200);
