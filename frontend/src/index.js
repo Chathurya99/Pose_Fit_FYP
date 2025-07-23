@@ -1001,6 +1001,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   endWorkoutBtn.addEventListener("click", () => {
     finishTimerCB();
     //location.reload();
-    window.location.href = "http://localhost:8080/dashboard.html";
+    window.location.href = "http://localhost:3000/dashboard.html";
   });
 });

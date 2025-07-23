@@ -65,63 +65,50 @@
             opacity: 1;
         }
 
-        /*--------------------------------------------------------------
-      # Header
-      --------------------------------------------------------------*/
         #header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             background: #0a0a0a;
-            transition: all 0.5s;
-            z-index: 997;
-            padding: 20px 0;
-        }
-
-        #header.header-scrolled {
-            box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
-            padding: 12px 0;
-        }
-
-        #header.header-inner-pages {
+            z-index: 999;
+            padding: 15px 0;
             box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
         }
 
         #header .logo {
-            font-size: 28px;
+            font-size: 24px;
             margin: 0;
-            padding: 0;
-            line-height: 1;
-            font-weight: 700;
-            text-transform: uppercase;
+            font-weight: bold;
         }
 
         #header .logo a {
-            color: #556270;
+            color: #ffffff;
+            text-decoration: none;
         }
 
-        #header .logo img {
-            max-height: 40px;
-        }
-
-        /*--------------------------------------------------------------
-      # Navigation Menu
-      --------------------------------------------------------------*/
-        /**
-      * Desktop Navigation 
-      */
         .navbar {
             padding: 0;
-            width: 100%
+            width: 100%;
         }
 
         .navbar ul {
-            margin: 0;
-            padding: 0;
-            display: flex;
             list-style: none;
+            display: flex;
+            gap: 20px;
+            padding-left: 0;
+            margin: 0;
             align-items: center;
         }
 
-        .navbar li {
-            position: relative;
+        .navbar li a {
+            color: #eaf4ff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .navbar li a:hover {
+            color: #70c1ff;
         }
 
         .logout-button {
@@ -136,33 +123,6 @@
             transform: translateY(-50%);
         }
 
-        .navbar a,
-        .navbar a:focus {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 0 10px 30px;
-            font-family: "Poppins", sans-serif;
-            font-size: 15px;
-            font-weight: 500;
-            color: #556270;
-            white-space: nowrap;
-            transition: 0.3s;
-        }
-
-        .navbar a i,
-        .navbar a:focus i {
-            font-size: 12px;
-            line-height: 0;
-            margin-left: 5px;
-        }
-
-        .navbar a:hover,
-        .navbar .active,
-        .navbar .active:focus,
-        .navbar li:hover>a {
-            color: #d9232d;
-        }
 
         .navbar .getstarted,
         .navbar .getstarted:focus {
@@ -353,6 +313,11 @@
         .navbar-mobile .dropdown>.dropdown-active {
             display: block;
         }
+
+        .progress-bar.completed {
+            background: #22c55e !important;
+            /* Tailwind green-500, or pick your favorite */
+        }
     </style>
     <script>
 
@@ -510,14 +475,14 @@
                         // Error occurred while decoding or verifying the token
                         // Redirect the user to the login page or display an error message
                         console.error('Token verification failed:', error);
-                        window.location.href = 'http://localhost:8080/login.html';
+                        window.location.href = 'http://localhost:3000/login.html';
                     }
 
                     // Here you can add your specific dashboard content and functionality
                 } else {
                     // User is not authenticated, redirect to the login page or handle accordingly
                     console.log('User is not authenticated');
-                    window.location.href = 'http://localhost:8080/login.html';
+                    window.location.href = 'http://localhost:3000/login.html';
                 }
             })
             .catch(error => {
@@ -538,17 +503,11 @@
 
 
 <body style="height: 100%; background-color: #1a1a1a;">
-    <header id="header" class="fixed-top d-flex align-items-center">
+    <header id="header" class="fixed-top d-flex align-items-center bg-dark">
         <div class="container d-flex align-items-center">
-
-            <h1 class="logo me-auto"><a href="index.html">POSE FIT</a></h1>
-
-            <a href="index.html" class="logo me-auto">
-                <img src="\img\yoga.svg" alt="" class="img-fluid" />
-            </a>
-
+            <h1 class="logo me-auto"><a href="index.html" class="text-light">POSE FIT</a></h1>
             <nav id="navbar" class="navbar">
-                <ul>
+                <ul class="d-flex list-unstyled mb-0">
                     <li><a href="dashboard.html">Exercises</a></li>
                     <li><a href="challenges.html">Challenges</a></li>
                     <li><a href="user_activity.html"> Activities</a></li>
@@ -557,9 +516,7 @@
                     <li><a href="user_activity_graph.html"> Activity Graphs</a></li>
                     <button id="logoutButton" class="logout-button">Logout</button>
                 </ul>
-                <i class="bi bi-list mobile-nav-toggle"></i>
             </nav>
-
         </div>
     </header>
 
@@ -592,32 +549,76 @@
     <script>
         // List of challenges (slug, display, target, id, description)
         const CHALLENGES = [
-            { slug: 'push-up', display: 'Push-up', target: 50, id: 'push-up-50', desc: 'Complete 50 push-ups with proper form.' },
-            { slug: 'squat', display: 'Squat', target: 50, id: 'squat-50', desc: 'Complete 50 squats with proper form.' },
-            { slug: 'jumping-jacks', display: 'Jumping Jacks', target: 100, id: 'jumping-jacks-100', desc: 'Complete 100 jumping jacks.' },
-            { slug: 'curls', display: 'Dumbbell High Curl', target: 10, id: 'curls-10', desc: 'Complete 10 dumbbell high curls.' },
-            { slug: 'lunges', display: 'Lunges', target: 10, id: 'lunges-10', desc: 'Complete 10 lunges (5 each leg).' },
-            { slug: 'toy_robot_side', display: 'Toy Robot', target: 30, id: 'toy_robot_side-30', desc: 'Complete 30 toy robot side steps.' },
-            { slug: 'hammer_curl', display: 'Hammer Curl', target: 50, id: 'hammer_curl-50', desc: 'Complete 50 hammer curls.' },
+            { slug: 'push-up', display: 'Pushup-low', target: 20, id: 'push-up-20', desc: 'Complete 20 push-ups with proper form.' },
+            { slug: 'push-up', display: 'Pushup-medium', target: 50, id: 'push-up-50', desc: 'Complete 50 push-ups with proper form.' },
+            { slug: 'push-up', display: 'Pushup-high', target: 100, id: 'push-up-100', desc: 'Complete 100 push-ups with proper form.' },
+            { slug: 'squat', display: 'Squat-low', target: 20, id: 'squat-20', desc: 'Complete 20 squats with proper form.' },
+            { slug: 'squat', display: 'Squat-medium', target: 50, id: 'squat-50', desc: 'Complete 50 squats with proper form.' },
+            { slug: 'squat', display: 'Squat-high', target: 100, id: 'squat-100', desc: 'Complete 100 squats with proper form.' },
+            { slug: 'jumping-jacks', display: 'Jumping Jacks-low', target: 20, id: 'jumping-jacks-20', desc: 'Complete 20 jumping jacks.' },
+            { slug: 'jumping-jacks', display: 'Jumping Jacks-medium', target: 50, id: 'jumping-jacks-50', desc: 'Complete 50 jumping jacks.' },
+            { slug: 'jumping-jacks', display: 'Jumping Jacks-high', target: 100, id: 'jumping-jacks-100', desc: 'Complete 100 jumping jacks.' },
+            { slug: 'curls', display: 'Dumbbell High Curl-low', target: 20, id: 'curls-20', desc: 'Complete 20 dumbbell high curls.' },
+            { slug: 'curls', display: 'Dumbbell High Curl-medium', target: 50, id: 'curls-50', desc: 'Complete 50 dumbbell high curls.' },
+            { slug: 'curls', display: 'Dumbbell High Curl-high', target: 100, id: 'curls-100', desc: 'Complete 100 dumbbell high curls.' },
+            { slug: 'lunges', display: 'Lunges-low', target: 20, id: 'lunges-20', desc: 'Complete 20 lunges (10 each leg).' },
+            { slug: 'lunges', display: 'Lunges-medium', target: 50, id: 'lunges-50', desc: 'Complete 50 lunges (25 each leg).' },
+            { slug: 'lunges', display: 'Lunges-high', target: 100, id: 'lunges-100', desc: 'Complete 100 lunges (50 each leg).' },
         ];
-        // Helper to get all challenge progress from localStorage
-        function getAllChallengeProgress() {
-            return JSON.parse(localStorage.getItem('challengeProgress') || '{}');
+        // Helper to get all challenge progress for the logged-in user from backend
+        async function getAllChallengeProgress() {
+            const userId = localStorage.getItem('uid');
+            if (!userId) return {};
+            try {
+                const res = await fetch('http://localhost:5000/challenge/getAllCompletions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId })
+                });
+                if (!res.ok) return {};
+                const completions = await res.json();
+                const progress = {};
+                completions.forEach(c => {
+                    const chal = CHALLENGES.find(ch => ch.display === c.challengeName && ch.target === c.target);
+                    if (chal) {
+                        // If timeTaken exists, treat as completed and set count to target
+                        const isCompleted = !!c.timeTaken;
+                        progress[chal.id] = {
+                            currentCount: isCompleted ? chal.target : (typeof c.repsCompleted === 'number' ? c.repsCompleted : 0),
+                            completed: isCompleted,
+                            time: c.timeTaken
+                        };
+                    }
+                });
+                return progress;
+            } catch (e) {
+                return {};
+            }
         }
-        // Helper to set all challenge progress in localStorage
-        function setAllChallengeProgress(progressObj) {
-            localStorage.setItem('challengeProgress', JSON.stringify(progressObj));
-        }
-        // Render challenge cards
-        function renderChallenges() {
+        // Render challenge cards (now async)
+        async function renderChallenges() {
             const row = document.getElementById('challenge-list');
-            const allProgress = getAllChallengeProgress();
+            const allProgress = await getAllChallengeProgress();
+            // Fetch latest completions for all challenges for the current user
+            const latestTimes = {};
+            for (const chal of CHALLENGES) {
+                const latest = await fetchLatestChallengeCompletion(chal.display, chal.target);
+                if (latest && latest.timeTaken) {
+                    latestTimes[chal.id] = latest.timeTaken;
+                }
+            }
             row.innerHTML = CHALLENGES.map(chal => {
                 // Check if this challenge is completed
                 let completedMsg = '';
                 const chalProgress = allProgress[chal.id];
+                let timeStr = '';
+                if (latestTimes[chal.id]) {
+                    timeStr = `<div style=\"color:green;font-weight:bold;margin-bottom:4px;\">Your best time: <span>${formatTime(latestTimes[chal.id])}</span></div>`;
+                }
                 if (chalProgress && chalProgress.completed && chalProgress.currentCount >= chal.target) {
-                    completedMsg = `<div style="color:green;font-weight:bold;margin-bottom:4px;">You have completed this challenge in <span>${formatTime(chalProgress.time)}</span>!</div>`;
+                    completedMsg = `<div style=\"color:green;font-weight:bold;margin-bottom:4px;\">You have completed this challenge!${timeStr}</div>`;
+                } else if (timeStr) {
+                    completedMsg = timeStr;
                 }
                 return `
           <div class="col-md-6 col-lg-4 mb-4 d-flex">
@@ -630,60 +631,94 @@
                   <span style="color:#3b82f6; font-weight:600;">Target: ${chal.target} reps</span>
                 </div>
                 <div class="progress mb-2" style="height:10px;">
-                  <div class="progress-bar" id="${chal.id}-progress" role="progressbar" style="width:0%; background:#2563eb;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="${chal.target}"></div>
-                </div>
-                <small style="color:#2563eb;">Progress: <span id="${chal.id}-current">0</span>/${chal.target}</small>
-                <button class="btn btn-primary mt-3" style="background:#2563eb; border:none;" onclick="updateWorkout('${chal.slug}')">Start Challenge</button>
-                <button class="btn btn-outline-secondary mt-2" onclick="resetChallenge('${chal.id}')">Reset</button>
-              </div>
-            </div>
+                  <div class="progress-bar${(chalProgress && chalProgress.completed) ? ' completed' : ''}" 
+                       id="${chal.id}-progress" 
+                       role="progressbar" 
+                       style="width:${(chalProgress && chalProgress.completed) ? '100' : (chalProgress ? Math.min((chalProgress.currentCount / chal.target) * 100, 100) : 0)}%; background:${(chalProgress && chalProgress.completed) ? '#22c55e' : '#2563eb'};" 
+                       aria-valuenow="${(chalProgress && chalProgress.completed) ? chal.target : (chalProgress ? chalProgress.currentCount : 0)}" 
+                       aria-valuemin="0" 
+                       aria-valuemax="${chal.target}">
           </div>
-        `;
+        </div>
+        <small style="color:#2563eb;">Progress: <span id="${chal.id}-current">${(chalProgress && chalProgress.completed) ? chal.target : (chalProgress ? chalProgress.currentCount : 0)}</span>/${chal.target}</small>
+        <button class="btn btn-primary mt-3" style="background:#2563eb; border:none;" onclick="updateWorkout('${chal.id}')">Start Challenge</button>
+        
+      </div>
+    </div>
+  </div>
+`;
             }).join('');
         }
-        renderChallenges();
         // Remove startChallengeFromList, use updateWorkout for challenge start
-        function resetChallenge(challengeId) {
-            const progressElement = document.getElementById(challengeId + '-progress');
-            const currentElement = document.getElementById(challengeId + '-current');
-            if (progressElement && currentElement) {
-                progressElement.style.width = '0%';
-                currentElement.textContent = '0';
-            }
-            let currentChallenge = JSON.parse(localStorage.getItem('currentChallenge') || 'null');
-            if (currentChallenge && currentChallenge.challengeId === challengeId) {
-                localStorage.removeItem('currentChallenge');
-                localStorage.removeItem('challengeCompleted');
-                localStorage.removeItem('challengeTime');
-            }
-            // Remove progress for this challenge
-            const allProgress = getAllChallengeProgress();
-            delete allProgress[challengeId];
-            setAllChallengeProgress(allProgress);
-            renderChallenges();
-            loadChallengeProgress();
-        }
-        function loadChallengeProgress() {
-            const allProgress = getAllChallengeProgress();
+        // function resetChallenge(challengeId) {
+        //     const progressElement = document.getElementById(challengeId + '-progress');
+        //     const currentElement = document.getElementById(challengeId + '-current');
+        //     if (progressElement && currentElement) {
+        //         progressElement.style.width = '0%';
+        //         currentElement.textContent = '0';
+        //     }
+        //     let currentChallenge = JSON.parse(localStorage.getItem('currentChallenge') || 'null');
+        //     if (currentChallenge && currentChallenge.challengeId === challengeId) {
+        //         localStorage.removeItem('currentChallenge');
+        //         localStorage.removeItem('challengeCompleted');
+        //         localStorage.removeItem('challengeTime');
+        //     }
+        //     // Call backend to reset progress for this challenge
+        //     const chal = CHALLENGES.find(c => c.id === challengeId);
+        //     const userId = localStorage.getItem('uid');
+        //     if (chal && userId) {
+        //         fetch('http://localhost:5000/challenge/resetCompletion', {
+        //             method: 'POST',
+        //             headers: { 'Content-Type': 'application/json' },
+        //             body: JSON.stringify({ userId, challengeName: chal.display, target: chal.target })
+        //         }).then(() => {
+        //             renderChallenges();
+        //             loadChallengeProgress();
+        //         });
+        //     } else {
+        //         renderChallenges();
+        //         loadChallengeProgress();
+        //     }
+        // }
+        // // Update loadChallengeProgress to use backend data
+        async function loadChallengeProgress() {
+            const allProgress = await getAllChallengeProgress();
             CHALLENGES.forEach(chal => {
                 const progressElement = document.getElementById(chal.id + '-progress');
                 const currentElement = document.getElementById(chal.id + '-current');
                 let count = 0;
                 if (allProgress[chal.id]) {
-                    count = allProgress[chal.id].currentCount || 0;
+                    // If completed, show the target as the count
+                    count = allProgress[chal.id].completed ? chal.target : (allProgress[chal.id].currentCount || 0);
                 }
                 if (progressElement && currentElement) {
                     const progress = (count / chal.target) * 100;
                     progressElement.style.width = progress + '%';
                     currentElement.textContent = count;
+
+                    // Add or remove the 'completed' class based on completion
+                    if (allProgress[chal.id] && allProgress[chal.id].completed) {
+                        progressElement.classList.add('completed');
+                    } else {
+                        progressElement.classList.remove('completed');
+                    }
                 }
             });
-            // Show popup if just completed a challenge
+            // Show popup if just completed a challenge (localStorage logic can remain for now)
             const justCompleted = localStorage.getItem('justCompletedChallenge');
             if (justCompleted) {
                 const chal = CHALLENGES.find(c => c.id === justCompleted);
-                if (chal && allProgress[chal.id] && allProgress[chal.id].completed) {
-                    showChallengeCompletePopup(chal, allProgress[chal.id].time);
+                if (chal) {
+                    // Fetch the latest completion from backend and show popup with correct time
+                    fetchLatestChallengeCompletion(chal.display, chal.target).then(latest => {
+                        if (latest) {
+                            showChallengeCompletePopup(chal, latest.timeTaken);
+                        } else {
+                            showChallengeCompletePopup(chal, null);
+                        }
+                    });
+                } else {
+                    showChallengeCompletePopup({ display: justCompleted }, null);
                 }
                 localStorage.removeItem('justCompletedChallenge');
             }
@@ -698,31 +733,11 @@
             } else {
                 timeBox.textContent = '';
             }
-            // Fetch leaderboard for this challenge
-            fetch(`http://localhost:5000/challenge/leaderboard/${encodeURIComponent(challenge.display)}`)
-                .then(res => res.json())
-                .then(data => {
-                    // Build leaderboard HTML
-                    let leaderboardHTML = '<h4 style="color:#2563eb;">Leaderboard</h4>';
-                    leaderboardHTML += '<table class="table table-sm" style="background:white;color:#2563eb;"><thead><tr><th>User</th><th>Time</th><th>Count</th></tr></thead><tbody>';
-                    data.forEach(entry => {
-                        const user = entry.userId?.firstName || entry.userId?.emailId || 'User';
-                        leaderboardHTML += `<tr>
-                    <td>${user}</td>
-                    <td>${formatTime(entry.timeTaken)}</td>
-                    <td>${entry.target}</td>
-                  </tr>`;
-                    });
-                    leaderboardHTML += '</tbody></table>';
-                    // Insert into popup
-                    let leaderboardDiv = document.getElementById('popup-leaderboard');
-                    if (!leaderboardDiv) {
-                        leaderboardDiv = document.createElement('div');
-                        leaderboardDiv.id = 'popup-leaderboard';
-                        timeBox.parentNode.appendChild(leaderboardDiv);
-                    }
-                    leaderboardDiv.innerHTML = leaderboardHTML;
-                });
+            // Remove leaderboard display: do not fetch or show leaderboard
+            let leaderboardDiv = document.getElementById('popup-leaderboard');
+            if (leaderboardDiv) {
+                leaderboardDiv.remove();
+            }
             popup.style.display = 'flex';
             document.getElementById('closeChallengePopup').onclick = function () {
                 popup.style.display = 'none';
@@ -734,7 +749,9 @@
             const sec = seconds % 60;
             return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
         }
+        // On DOMContentLoaded, use the new async render and load
         document.addEventListener('DOMContentLoaded', function () {
+            renderChallenges();
             loadChallengeProgress();
         });
         window.addEventListener('storage', function (e) {
@@ -747,9 +764,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        function updateWorkout(exercise) {
-            // Find the challenge object
-            const chal = CHALLENGES.find(c => c.slug === exercise);
+        function updateWorkout(challengeId) {
+            // Find the challenge object by id
+            const chal = CHALLENGES.find(c => c.id === challengeId);
             if (chal) {
                 // Store challenge info in localStorage
                 localStorage.setItem('currentChallenge', JSON.stringify({
@@ -762,9 +779,9 @@
             }
             localStorage.setItem('DBWOSettings', JSON.stringify({
                 ...JSON.parse(localStorage.getItem('DBWOSettings')),
-                currWorkout: exercise
+                currWorkout: chal ? chal.slug : ''
             }));
-            location.href = 'http://localhost:8080/challenge-run.html';
+            location.href = 'http://localhost:3000/challenge-run.html';
         }
     </script>
     <script>
@@ -779,7 +796,28 @@
         });
     </script>
 
-
+    <script>
+        async function fetchLatestChallengeCompletion(challengeName, target) {
+            const userId = localStorage.getItem('uid');
+            if (!userId) return null;
+            try {
+                const res = await fetch('http://localhost:5000/challenge/getAllCompletions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId })
+                });
+                if (!res.ok) return null;
+                const completions = await res.json();
+                // Find the latest completion for this challenge and target
+                const filtered = completions
+                    .filter(c => c.challengeName === challengeName && c.target === target)
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+                return filtered[0] || null;
+            } catch (e) {
+                return null;
+            }
+        }
+    </script>
 
 
 </body>

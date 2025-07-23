@@ -748,6 +748,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   let challengeStartTime = null;
   let challengeActualStartTime = null; // NEW: for accurate timing
   if (challenge) {
+    console.log('[DEBUG] Loaded challenge from localStorage:', challenge); // Debug log
+    // Ensure target is a number
+    challenge.target = Number(challenge.target);
     // Show challenge info in the UI
     if (titleWOElem) {
       titleWOElem.innerText = `${challenge.display} Challenge: 0/${challenge.target}`;
@@ -758,27 +761,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   // --- Hook into pose counter update ---
   // Find where the repetition count is updated and add challenge logic
   // We'll monkey-patch WOPose.counter.resetCount and increment logic
-  const origResetCount = WOPose.counter.resetCount.bind(WOPose.counter);
-  WOPose.counter.resetCount = function() {
-    origResetCount();
-    if (challenge && titleWOElem) {
-      titleWOElem.innerText = `${challenge.display} Challenge: 0/${challenge.target}`;
-    }
-    if (challenge) {
-      this.count = 0;
-      challenge.currentCount = 0;
-      localStorage.setItem('currentChallenge', JSON.stringify(challenge));
-    }
-  };
-
-  // NEW: Listen for when the actual challenge starts (after delay)
-  // We hook into the timer's finishDelayCB to set the actual start time
-  // This assumes finishDelayCB is called when the countdown ends and the challenge begins
-  const origFinishDelayCB = typeof window.finishDelayCB === 'function' ? window.finishDelayCB : () => {};
-  window.finishDelayCB = function() {
-    origFinishDelayCB();
-  };
-
   // Patch the count property with a getter/setter if not already patched
   if (challenge && !WOPose.counter._challengePatched) {
     WOPose.counter._count = WOPose.counter.count || 0;
@@ -787,6 +769,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         return this._count;
       },
       set: function(val) {
+        // Debug: Log every count change
+        console.log('[DEBUG] Rep counter set to:', val);
         // Start timer when first rep is counted
         if (this._count === 0 && val > 0) {
           challengeActualStartTime = Date.now();
@@ -831,7 +815,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           localStorage.setItem('challengeProgress', JSON.stringify(allProgress));
           localStorage.setItem('justCompletedChallenge', challenge.challengeId);
           setTimeout(() => {
-            window.location.href = 'http://localhost:8080/challenges.html';
+            window.location.href = 'http://localhost:3000/challenges.html';
           }, 1200);
         }
       },
@@ -839,6 +823,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     WOPose.counter._challengePatched = true;
   }
+
+  // Debug: Log when the challenge is reset
+  const origResetCount = WOPose.counter.resetCount.bind(WOPose.counter);
+  WOPose.counter.resetCount = function() {
+    console.log('[DEBUG] Rep counter reset!');
+    origResetCount();
+    if (challenge && titleWOElem) {
+      titleWOElem.innerText = `${challenge.display} Challenge: 0/${challenge.target}`;
+    }
+    if (challenge) {
+      this.count = 0;
+      challenge.currentCount = 0;
+      localStorage.setItem('currentChallenge', JSON.stringify(challenge));
+    }
+  };
+
+  // NEW: Listen for when the actual challenge starts (after delay)
+  // We hook into the timer's finishDelayCB to set the actual start time
+  // This assumes finishDelayCB is called when the countdown ends and the challenge begins
+  const origFinishDelayCB = typeof window.finishDelayCB === 'function' ? window.finishDelayCB : () => {};
+  window.finishDelayCB = function() {
+    origFinishDelayCB();
+  };
 
   // Just for initial (once run)
   // It will be remove when replaced by new webcamElem
@@ -1098,6 +1105,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   endWorkoutBtn.addEventListener("click", () => {
     finishTimerCB();
     //location.reload();
-    window.location.href = "http://localhost:8080/challenges.html";
+    window.location.href = "http://localhost:3000/challenges.html";
   });
 });

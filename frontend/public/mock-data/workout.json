@@ -1,7 +1,7 @@
 {
   "nameWorkout": ["Push Up", "Squat","Curls","TRS","Jumping Jacks", "Lunges","hammer_curl"],
   "slugWorkout": ["push-up", "squat", "curls","toy_robot_side", "jumping-jacks", "lunges","hammer_curl"],
-  "duration": ["1 Minutes", "3 Minutes", "5 Minutes", "7 Minutes"],
+  "duration": ["1 Minutes", "2 Minutes","3 Minutes","4 Minutes", "5 Minutes", "6 Minutes","7 Minutes", "8 Minutes", "9 Minutes", "10 Minutes", "11 Minutes", "12 Minutes", "13 Minutes", "14 Minutes", "15 Minutes", "16 Minutes", "17 Minutes", "18 Minutes", "19 Minutes", "20 Minutes", "21 Minutes", "22 Minutes", "23 Minutes", "24 Minutes", "25 Minutes", "26 Minutes", "27 Minutes", "28 Minutes", "29 Minutes", "30 Minutes"],
   "settingsConfig": {
     "currWorkout": "None",
     "currDuration": "None",

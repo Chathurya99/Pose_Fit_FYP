@@ -98,8 +98,62 @@
         text-transform: uppercase;
     }
 
+    #header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: #0a0a0a;
+        z-index: 999;
+        padding: 15px 0;
+        box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    #header .logo {
+        font-size: 24px;
+        margin: 0;
+        font-weight: bold;
+    }
+
     #header .logo a {
-        color: #556270;
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .navbar {
+        padding: 0;
+        width: 100%;
+    }
+
+    .navbar ul {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+        padding-left: 0;
+        margin: 0;
+        align-items: center;
+    }
+
+    .navbar li a {
+        color: #eaf4ff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .navbar li a:hover {
+        color: #70c1ff;
+    }
+
+    .logout-button {
+        background-color: red;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        position: absolute;
+        top: 50%;
+        right: 16px;
+        transform: translateY(-50%);
     }
 
     #header .logo img {
@@ -602,14 +656,14 @@
                     // Error occurred while decoding or verifying the token
                     // Redirect the user to the login page or display an error message
                     console.error('Token verification failed:', error);
-                    window.location.href = 'http://localhost:8080/login.html';
+                    window.location.href = 'http://localhost:3000/login.html';
                 }
 
                 // Here you can add your specific dashboard content and functionality
             } else {
                 // User is not authenticated, redirect to the login page or handle accordingly
                 console.log('User is not authenticated');
-                window.location.href = 'http://localhost:8080/login.html';
+                window.location.href = 'http://localhost:3000/login.html';
             }
         })
         .catch(error => {
@@ -626,17 +680,11 @@
 </head>
 
 <body style="height: 100%;background-color: #1a1a1a;">
-    <header id="header" class="fixed-top d-flex align-items-center">
+    <header id="header" class="fixed-top d-flex align-items-center bg-dark">
         <div class="container d-flex align-items-center">
-
-            <h1 class="logo me-auto"><a href="index.html">POSE FIT</a></h1>
-
-            <a href="index.html" class="logo me-auto">
-                <img src="\img\yoga.svg" alt="" class="img-fluid" />
-            </a>
-
+            <h1 class="logo me-auto"><a href="index.html" class="text-light">POSE FIT</a></h1>
             <nav id="navbar" class="navbar">
-                <ul>
+                <ul class="d-flex list-unstyled mb-0">
                     <li><a href="dashboard.html">Exercises</a></li>
                     <li><a href="challenges.html">Challenges</a></li>
                     <li><a href="user_activity.html"> Activities</a></li>
@@ -645,9 +693,7 @@
                     <li><a href="user_activity_graph.html"> Activity Graphs</a></li>
                     <button id="logoutButton" class="logout-button">Logout</button>
                 </ul>
-                <i class="bi bi-list mobile-nav-toggle"></i>
             </nav>
-
         </div>
     </header>
 

@@ -197,20 +197,31 @@
             // Error occurred while decoding or verifying the token
             // Redirect the user to the login page or display an error message
             console.error('Token verification failed:', error);
-            window.location.href = 'http://localhost:8080/login.html';
+            window.location.href = 'http://localhost:3000/login.html';
           }
 
           // Here you can add your specific dashboard content and functionality
         } else {
           // User is not authenticated, redirect to the login page or handle accordingly
           console.log('User is not authenticated');
-          window.location.href = 'http://localhost:8080/login.html';
+          window.location.href = 'http://localhost:3000/login.html';
         }
       })
       .catch(error => {
         console.error('Error checking authentication:', error);
         // Handle error if necessary
       });
+  </script>
+  <script>
+    // Debug: Log the currentChallenge object and its target value
+    document.addEventListener('DOMContentLoaded', function () {
+      const challenge = JSON.parse(localStorage.getItem('currentChallenge') || 'null');
+      if (challenge) {
+        console.log('[DEBUG] challenge-run.html loaded currentChallenge:', challenge);
+      } else {
+        console.warn('[DEBUG] challenge-run.html: No currentChallenge found in localStorage');
+      }
+    });
   </script>
 </head>
 

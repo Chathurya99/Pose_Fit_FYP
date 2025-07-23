@@ -327,9 +327,9 @@
                 if (response.status === 200) {
                     const data = await response.json();
                     if (data.userId) {
-                      localStorage.setItem('uid', data.userId);
+                        localStorage.setItem('uid', data.userId);
                     }
-                    window.location.href = 'http://localhost:8080/login.html';
+                    window.location.href = 'http://localhost:3000/login.html';
                 }
                 else if (response.status === 400) {
                     errorMessage2.style.display = 'block';
@@ -343,12 +343,12 @@
 
         // Defensive: If uid is not a valid ObjectId, clear localStorage and force re-register
         function isValidObjectId(id) {
-          return /^[a-fA-F0-9]{24}$/.test(id);
+            return /^[a-fA-F0-9]{24}$/.test(id);
         }
         if (localStorage.getItem('uid') && !isValidObjectId(localStorage.getItem('uid'))) {
-          localStorage.clear();
-          alert('Session reset due to invalid user ID. Please register again.');
-          window.location.reload();
+            localStorage.clear();
+            alert('Session reset due to invalid user ID. Please register again.');
+            window.location.reload();
         }
 
     </script>
